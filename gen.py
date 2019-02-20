@@ -17,3 +17,4 @@ for node_id in range(graph.num_nodes):
     connections = np.random.choice(range(graph.num_nodes), num_connections, replace=False)
     graph.set_connections(node_id, connections)
 
+print(graph.get_connected_nodes(4))

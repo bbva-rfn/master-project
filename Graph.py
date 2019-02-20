@@ -1,5 +1,5 @@
 from typing import List, Union
-
+from nptyping import Array
 import numpy as np
 from scipy.sparse import lil_matrix
 
@@ -7,9 +7,8 @@ from Node import Node
 
 
 class Graph:
-    def __init__(self, nodes: 'np.ndarray[Node]'):
-        assert isinstance(nodes, np.ndarray)
-        assert all(isinstance(node, Node) for node in nodes)
+    def __init__(self, nodes: Array[Node]):
+        assert isinstance(nodes, Array[Node])
 
         self.__nodes = nodes
         num_nodes = len(nodes)
@@ -24,17 +23,19 @@ class Graph:
     def remove_connections(self, from_node: int, to_nodes: Union[int, List[int]]):
         self.__matrix[from_node, to_nodes] = 0
 
-    def get_connections(self, node_id: int) -> lil_matrix:
+    def get_connections(self, node_id: int) -> Array[int]:
         assert isinstance(node_id, int)
 
-        return self.__matrix[node_id]
+        _, cols = self.__matrix.getrow(node_id).nonzero()
 
-    def get_connected_nodes(self, node_id: int) -> List[Node]:
+        return cols
+
+    def get_connected_nodes(self, node_id: int) -> Array[Node]:
         assert isinstance(node_id, int)
 
         connected_node_ids = self.get_connections(node_id)
 
-        return self.__nodes[connected_node_ids].copy()
+        return self.__nodes[connected_node_ids]
 
     def get_matrix(self) -> lil_matrix:
         return self.__matrix
