@@ -1,21 +1,30 @@
+from typing import List
+from bson import ObjectId
+
+
+class Feature:
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+
 class Node:
-    def __init__(self, id):
+    def __init__(self):
         self.__features = []
         self.__neighbours = []
         self.__probability = []
-        self.__id = id
+        self.__id = ObjectId()
 
-    def get_probability(self):
-        return self.__probability
+    def get_id(self) -> ObjectId:
+        return self.__id
 
-    def id_nei(self):
-        if type(id) != id:
-            raise Exception('Not a correct id')
+    def make_connection(self, node: 'Node'):
+        self.__neighbours.append(node.get_id())
 
-    def get_features(self):
+    def get_features(self) -> List[Feature]:
         return self.__features
 
-    def get_neigbours(self):
+    def get_neighbours(self) -> List[ObjectId]:
         return self.__neighbours
 
     def add_neighbours(self, neighbours):
@@ -30,23 +39,6 @@ class Node:
 
         self.__features.append(feature)
 
-
-class Feature:
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
-
-
-class Probability:
-    def __init__(self, value):
-        self.value = value
-
-
-node = Node()
-feature = Feature('Ramon', 10)
-
-print(node.get_features())
-
-node.add_feature(feature)
-
-print(node.get_features())
+    def make_connections(self, nodes: List['Node']):
+        for node in nodes:
+            self.make_connection(node)
