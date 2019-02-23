@@ -1,6 +1,8 @@
+import pickle
+from pathlib import Path
 from typing import List, Union
+
 from nptyping import Array
-import numpy as np
 from scipy.sparse import lil_matrix
 
 from Node import Node
@@ -10,9 +12,14 @@ class Graph:
     def __init__(self, nodes: Array[Node]):
         assert isinstance(nodes, Array[Node])
 
+        self.__set_node_ids(nodes)
         self.__nodes = nodes
         num_nodes = len(nodes)
         self.__matrix = lil_matrix((num_nodes, num_nodes))
+
+    def __set_node_ids(self, nodes: Array[Node]):
+        for id, node in enumerate(nodes):
+            node.set_id(id)
 
     def set_connections(self, from_node: int, to_nodes: Union[int, List[int]]):
         self.__matrix[from_node, to_nodes] = 1
@@ -40,12 +47,26 @@ class Graph:
     def get_matrix(self) -> lil_matrix:
         return self.__matrix
 
-    def get_node(self, node_id: int):
-        assert isinstance(node_id, int)
-        if node_id >= self.num_nodes:
-            raise Exception("Node with id %d does not exist" % node_id)
+    def get_nodes(self, node_ids: Union[int, List[int]]):
+        return self.__nodes[node_ids]
 
-        return self.__nodes[node_id]
+    def save(self, file_path: str):
+        assert isinstance(file_path, str)
+
+        file_path = Path(file_path)
+        pickle.dump(self, file_path.open("wb"))
+
+    @staticmethod
+    def load(file_path: str) -> 'Graph':
+        assert isinstance(file_path, str)
+
+        file_path = Path(file_path)
+        graph = pickle.load(file_path.open("rb"))
+
+        if not isinstance(graph, Graph):
+            raise Exception("File not a graph pickle")
+
+        return graph
 
     @property
     def num_nodes(self):

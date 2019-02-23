@@ -1,44 +1,41 @@
-from typing import List
-from bson import ObjectId
+class Features:
+    def __init__(self):
+        self.__dict = {}
 
+    def set(self, name, value):
+        self.__dict[name] = value
 
-class Feature:
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
+    def get(self, key):
+        if key not in self.__dict:
+            raise Exception('Feature `%s` does not exist' % key)
+
+        return self.__dict[key]
+
+    def remove(self, key):
+        del self.__dict[key]
+
+    @property
+    def features(self):
+        return self.__dict.keys()
 
 
 class Node:
-    def __init__(self):
-        self.__features = []
-        self.__neighbours = []
-        self.__probability = []
-        self.__id = ObjectId()
+    def __init__(self, id=0):
+        self.__features = Features()
+        self.__id = id
 
-    def get_id(self) -> ObjectId:
+    def set_id(self, id):
+        self.__id = id
+
+    def get_feature(self, feature_name):
+        return self.__features.get(feature_name)
+
+    def set_feature(self, feature_name, value):
+        self.__features.set(feature_name, value)
+
+    def delete_feature(self, feature_name):
+        self.__features.remove(feature_name)
+
+    @property
+    def id(self):
         return self.__id
-
-    def make_connection(self, node: 'Node'):
-        self.__neighbours.append(node.get_id())
-
-    def get_features(self) -> List[Feature]:
-        return self.__features
-
-    def get_neighbours(self) -> List[ObjectId]:
-        return self.__neighbours
-
-    def add_neighbours(self, neighbours):
-        if type(neighbours) != Node:
-            raise Exception('Not a Neighbour Node')
-
-        self.__neighbours.append(neighbours.id)
-
-    def add_feature(self, feature):
-        if type(feature) != Feature:
-            raise Exception('Not a feature')
-
-        self.__features.append(feature)
-
-    def make_connections(self, nodes: List['Node']):
-        for node in nodes:
-            self.make_connection(node)
