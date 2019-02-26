@@ -49,8 +49,20 @@ def update_default(node: Node, graph: Graph):
     connected_nodes = graph.get_connected_nodes(node.id)
 
     q = calculate_q(connected_nodes, r)
+    #here it is a difference with the way they do it in the SIS agent code
+    #Basically you are fitting the new defaulted p to the interval [0,1]
+    #They simply reassign the previous value of p if it lies outside
+    #It is an interesting difference, since perhaps it is better to fit it 
+    #rather than simply consider the previous value
     new_defaulted_p = np.clip((1 - q) * (1 - defaulted_p), 0., 1.)
-
+    #I simply put the code they would use just in case / It could also be a function check_p()
+    #new_defaulted_p = (1-q)*(1-defaulted_p)
+    # if new_defaulted_p < 0 or new_defaulted_p > 1:
+        #new_defaulted_p = defaulted_p
+        
+    #There is also thee mu parameter difference, in case nothing else work
+    #perhaps it should be taken into consideration
+    
     all_connected_nodes = node.get_feature('all_connected')
 
     for connected_node in connected_nodes:
