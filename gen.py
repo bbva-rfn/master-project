@@ -4,7 +4,7 @@ from Node import *
 
 num_nodes = 1000
 num_sectors = 17
-approx_num_connections = 100
+approx_num_connections = 10
 defaulted_prob = 0.01
 
 nodes = []
@@ -25,6 +25,9 @@ for node_id in range(graph.num_nodes):
 
     node = nodes[node_id]
     node.set_feature('all_connected', connections)
-    node.set_feature('weights', np.random.beta(2, 5, num_connections))
+    weights = 1 / num_connections
+    # weights = np.random.beta(2, 5, num_connections)
+    # weights /= np.sum(weights)
+    node.set_feature('weights', weights)
 
 graph.save('graphs/test.pickle')
