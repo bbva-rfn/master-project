@@ -102,4 +102,3 @@ def iteration(graph: Graph):
 for i in range(iterations):
     iteration(graph)
     print(defaulted_density[-1], i)
-
