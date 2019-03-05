@@ -111,3 +111,4 @@ def update(_):
 
 a = anim.FuncAnimation(fig, update, frames=100, repeat=False)
 plt.show()
+
