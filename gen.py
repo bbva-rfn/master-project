@@ -14,7 +14,7 @@ for _ in range(num_nodes):
     node.set_feature('sector', np.random.randint(num_sectors))
     nodes.append(node)
 
-nodes = np.array(nodes)
+nodes = np.array(nodes, dtype=Node)
 
 graph = Graph(nodes)
 
@@ -25,9 +25,7 @@ for node_id in range(graph.num_nodes):
 
     node = nodes[node_id]
     node.set_feature('all_connected', connections)
-    weights = 1 / num_connections
-    # weights = np.random.beta(2, 5, num_connections)
-    # weights /= np.sum(weights)
-    node.set_feature('weights', weights)
+    weights_val = 1 / num_connections
+    node.set_feature('weights', weights_val * np.ones(num_connections))
 
 graph.save('graphs/test.pickle')

@@ -8,8 +8,9 @@ import matplotlib.animation as anim
 
 # Parameters, modifiable
 iterations = 100
-beta = 0.9
-mu = 0
+beta = 0.3
+mu = 0.4
+defaulted_threshold = 0.5
 
 # Load in graph
 graph = Graph.load('graphs/test.pickle')
@@ -53,7 +54,9 @@ def update_default(node: Node, graph: Graph):
 
     q = calculate_q(connected_nodes, r)
     new_defaulted_p = (1 - q) * (1 - defaulted_p) + (1 - mu) * defaulted_p + mu * (1 - q) * defaulted_p
-    new_defaulted_p = defaulted_p if 0 > new_defaulted_p > 1 else new_defaulted_p
+    # new_defaulted_p = np.clip(new_defaulted_p, 0, 1)
+    # new_defaulted_p = defaulted_p if 0 > new_defaulted_p > 1 else new_defaulted_p
+    new_defaulted_p = 1 if np.random.random() < new_defaulted_p else 0
 
     all_connected_nodes = node.get_feature('all_connected')
 
