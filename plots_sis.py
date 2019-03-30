@@ -4,7 +4,7 @@ import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
-from main import SecNet
+from SecNet import SecNet
 
 # Load in graph + parameters
 def construct_probs_by_sector(density_probs):
