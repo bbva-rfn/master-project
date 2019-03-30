@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*
 
-import pickle
 from networkx import DiGraph
-from main import get_nodes_per_sector, iteration
-
-
-def run_without_plot(g: DiGraph, num_iter=100):
-    for i in range(0, num_iter):
-        iteration(g)
 
 
 def cascade_true_origins(graph: DiGraph):
@@ -51,20 +44,3 @@ def check_infected_neighbours(node, graph: DiGraph):
             s += check_infected_neighbours(neighbor)
             s += 1
     return s
-
-
-# Parameters, modifiable
-iterations = 100
-beta = 0.5
-mu = 0.4
-
-# Load in graph
-graph = pickle.load(open('graphs/new.pickle', 'rb'))
-
-defaulted_density = []
-nodes_per_sector = get_nodes_per_sector(graph)
-run_without_plot(graph, iterations)
-
-origins = cascade_fake_origins(graph)
-size = check_cascade_size(origins)
-print(size)
