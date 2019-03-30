@@ -15,7 +15,6 @@ graph = pickle.load(open('graphs/new.pickle', 'rb'))
 
 
 # Algorithm
-
 def get_nodes_per_sector(graph: DiGraph):
     nodes_per_sector = {}
 
@@ -69,7 +68,7 @@ def update_default(node, graph: DiGraph):
             eligible_nodes = np.array([node for node in eligible_nodes if node['defaulted'] <= defaulted_p])
 
             if eligible_nodes.size == 0:
-                weights = [neighbor['weight'] for neighbor in neighbors.values()]
+                weights = [neighbor['weight'] for neighbor in graph[node['id']].values()]
                 sum_weights = np.sum(weights)
                 updated_edges = [(node['id'], to_node_id, val['weight'] / sum_weights) for to_node_id, val in
                                  neighbors.items()]
@@ -78,6 +77,15 @@ def update_default(node, graph: DiGraph):
 
             new_node = np.random.choice(eligible_nodes)
             graph.add_edge(node['id'], new_node['id'], weight=weight)
+            weights = [neighbor['weight'] for neighbor in graph[node['id']].values()]
+            sum_weights = np.sum(weights)
+            updated_edges = [(node['id'], to_node_id, val['weight'] / sum_weights) for to_node_id, val in
+                             neighbors.items()]
+            graph.update(edges=updated_edges)
+
+            if np.sum(weights) != 1:
+                print(weights)
+
             all_connected_nodes = np.append(all_connected_nodes, new_node['id'])
             node['all_connected'] = all_connected_nodes
 
