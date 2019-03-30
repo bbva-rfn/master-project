@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+from matplotlib.pyplot import show, figure
 from networkx import DiGraph
 
 

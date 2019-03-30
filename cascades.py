@@ -23,24 +23,26 @@ def cascade_fake_origins(graph: DiGraph):  # actually ends but better for size c
             origins.remove(node['id'])
         else:
             neighbors = graph[node['id']]
-            for neighbor in neighbors.values():
-                if neighbor['defaulted'] == 1:
+            neighbor_nodes = [graph.nodes[node_id] for node_id in list(neighbors)]
+            for neighbor in neighbor_nodes:
+                if neighbor['defaulted'] and neighbor['id'] in origins:
                     origins.remove(neighbor['id'])
     return origins  # the only node id's remaining are the defaulted ones not pointed by any other defaulted node
 
 
-def check_cascade_size(origins):
+def check_cascade_size(graph: DiGraph, origins):
     sizes = []
     for origin in origins:
-        sizes.append(check_infected_neighbours(origin))
+        sizes.append(check_infected_neighbours(graph, origin))
     return sizes
 
 
-def check_infected_neighbours(node, graph: DiGraph):
+def check_infected_neighbours(graph: DiGraph, node_id):
     s = 0
-    neighbors = graph[node['id']]
-    for neighbor in neighbors.values():
-        if neighbor['defaulted'] == 1:
-            s += check_infected_neighbours(neighbor)
+    neighbors = graph[node_id]
+    neighbor_nodes = [graph.nodes[node_id] for node_id in list(neighbors)]
+    for neighbor in neighbor_nodes:
+        if neighbor['defaulted']:
+            s += check_infected_neighbours(graph, neighbor['id'])
             s += 1
     return s
