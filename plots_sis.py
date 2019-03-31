@@ -34,12 +34,13 @@ for beta in betas:
         nodes = sn.nodes_per_sector[sector]
         n = len(nodes)
         for node_id in nodes:
-            node = g.nodes[node_id]
+            node = sn.graph.nodes[node_id]
             prob_by_sector[sector] += node['defaulted']
         prob_by_sector[sector] = prob_by_sector[sector]/n
     
     density_probs.append(prob_by_sector)
 
+print(density_probs)
 
 probs_by_sector = construct_probs_by_sector(density_probs)
 print(probs_by_sector)
@@ -48,5 +49,6 @@ for prob in probs_by_sector:
     plt.plot(betas,prob)
 plt.xlabel('betas')
 plt.ylabel('density prob')
+plt.savefig('images/prob_by_sector.png')
 plt.show()
 
