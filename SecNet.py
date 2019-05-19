@@ -3,7 +3,7 @@ from enum import Enum
 
 import numpy as np
 from matplotlib.pyplot import show, figure
-from networkx import DiGraph
+from networkx import DiGraph, set_node_attributes
 
 
 def print_progress(current, total, num_bars=40):
@@ -23,15 +23,25 @@ class ReconnectionPolicy(Enum):
 
 
 class SecNet:
-    def __init__(self, graph: DiGraph, mu: float, beta: float,
-                 stochastic: bool = True, reconnection_policy=ReconnectionPolicy.RANDOM):
-        self.reconnection_policy = reconnection_policy
-        self.stochastic = True if stochastic else False
+    def __init__(self, graph: DiGraph, mu: float, beta: float, stochastic: bool = True,
+                 reconnection_policy: ReconnectionPolicy = ReconnectionPolicy.RANDOM,
+                 default_delay=0):
         self.graph = graph.copy()
+
         self.mu = mu
         self.beta = beta
+        self.stochastic = stochastic
+        self.reconnection_policy = reconnection_policy
+        self.default_delay = default_delay
+
         self.defaulted_density = []
         self.nodes_per_sector = self.get_nodes_per_sector()
+
+        if default_delay != 0:
+            self.init_default_delay()
+
+    def init_default_delay(self):
+        set_node_attributes(self.graph, 0, name='defaulted_turns')
 
     def run(self, iterations=100, verbose=True):
         if verbose:
@@ -40,7 +50,7 @@ class SecNet:
         for it in range(iterations):
             if verbose:
                 print_progress(it + 1, iterations)
-            self.iteration()
+            self.iterate()
 
     def plot(self):
         fig = figure()
@@ -48,7 +58,7 @@ class SecNet:
         ax.plot(self.defaulted_density)
         show()
 
-    def iteration(self):
+    def iterate(self):
         graph = self.graph
         total_p = 0
 
@@ -125,13 +135,20 @@ class SecNet:
 
         return new_p
 
-    @staticmethod
-    def should_reconnect(node, neighbor, reconnection_policy):
+    def should_reconnect(self, node, neighbor, reconnection_policy):
+        wait = neighbor['defaulted_turns'] < self.default_delay
+        reconnect = False
+
         if reconnection_policy in [ReconnectionPolicy.RANDOM, ReconnectionPolicy.STRONG]:
-            return neighbor['defaulted'] == 1
+            reconnect = neighbor['defaulted'] == 1
 
         if reconnection_policy == ReconnectionPolicy.SOFT:
-            return neighbor['defaulted'] > node['defaulted']
+            reconnect = neighbor['defaulted'] > node['defaulted']
+
+        if reconnect:
+            neighbor['defaulted_turns'] += 1
+
+        return reconnect and not wait
 
     @staticmethod
     def apply_p_policy(p, is_stochastic):
