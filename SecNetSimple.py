@@ -78,9 +78,15 @@ class SecNetSimple:
         return new_p
 
     def calculate_q(self, nodes, weights):
+        # r = 0
+
         defaulted_probs = []
         for node in nodes:
             defaulted_probs.append(node['defaulted'])
+            # r += 1
+
+        # print(weights)
+        # weights = 1. / r
 
         defaulted_probs = np.array(defaulted_probs)
         return np.prod(1 - self.beta * weights * defaulted_probs)

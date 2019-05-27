@@ -124,6 +124,9 @@ class SecNet:
         not_in_connected_mask = np.isin(nodes_in_sector, all_connected_nodes, invert=True)
         if policy == ReconnectionPolicy.SOFT:
             eligible_nodes = [graph.nodes[node_id] for node_id in nodes_in_sector[not_in_connected_mask]
+                              if graph.nodes[node_id]['defaulted'] <= node['defaulted']]
+        elif policy == ReconnectionPolicy.STRONG:
+            eligible_nodes = [graph.nodes[node_id] for node_id in nodes_in_sector[not_in_connected_mask]
                               if graph.nodes[node_id]['defaulted'] < node['defaulted']]
         else:
             eligible_nodes = [graph.nodes[node_id] for node_id in nodes_in_sector[not_in_connected_mask]]
@@ -140,17 +143,21 @@ class SecNet:
         return new_p
 
     def should_reconnect(self, node, neighbor, reconnection_policy):
-        wait = neighbor['defaulted_turns'] < self.default_delay
+        wait = self.default_delay and neighbor['defaulted_turns'] < self.default_delay
         reconnect = False
 
-        if reconnection_policy in [ReconnectionPolicy.RANDOM, ReconnectionPolicy.STRONG]:
+        if reconnection_policy in [ReconnectionPolicy.SOFT, ReconnectionPolicy.RANDOM]:
             reconnect = neighbor['defaulted'] == 1
 
-        if reconnection_policy == ReconnectionPolicy.SOFT:
-            reconnect = neighbor['defaulted'] > node['defaulted']
+        if reconnection_policy == ReconnectionPolicy.STRONG:
+            reconnect = neighbor['defaulted'] == 1 or neighbor['defaulted'] > node['defaulted']
 
-        if reconnect:
+        if reconnect and self.default_delay:
             neighbor['defaulted_turns'] += 1
+            print(neighbor['defaulted_turns'])
+
+        if not reconnect:
+                neighbor['defaulted_turns'] = 0
 
         return reconnect and not wait
 
