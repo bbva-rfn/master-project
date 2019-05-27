@@ -17,14 +17,15 @@ def print_progress(current, total, num_bars=40):
 
 
 class ReconnectionPolicy(Enum):
-    RANDOM = 1
-    SOFT = 2
-    STRONG = 3
+    NONE = 1
+    RANDOM = 2
+    SOFT = 3
+    STRONG = 4
 
 
 class SecNet:
     def __init__(self, graph: DiGraph, mu: float, beta: float, stochastic: bool = True,
-                 reconnection_policy: ReconnectionPolicy = ReconnectionPolicy.RANDOM,
+                 reconnection_policy: ReconnectionPolicy = ReconnectionPolicy.NONE,
                  default_delay=0):
         self.graph = graph.copy()
 
@@ -83,6 +84,9 @@ class SecNet:
         self.reconnect_neighbors(node, neighbor_nodes)
 
     def reconnect_neighbors(self, node, neighbor_nodes):
+        if self.reconnection_policy == ReconnectionPolicy.NONE:
+            return None
+
         for neighbor in neighbor_nodes:
             if self.should_reconnect(node, neighbor, self.reconnection_policy):
                 self.reconnect(node, neighbor)
@@ -153,7 +157,7 @@ class SecNet:
     @staticmethod
     def apply_p_policy(p, is_stochastic):
         if is_stochastic:
-            return 1 if np.random.random() > p else 0
+            return 1 if np.random.random() < p else 0
 
         return p
 
@@ -165,7 +169,6 @@ class SecNet:
         defaulted_probs = np.array(defaulted_probs)
         return np.prod(1 - self.beta * weights * defaulted_probs)
 
-    # Algorithm
     def get_nodes_per_sector(self):
         graph = self.graph
         nodes_per_sector = {}
