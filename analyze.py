@@ -5,7 +5,7 @@ from SecNet import SecNet
 from cascades import cascade_fake_origins,check_cascade_size_recursive
 from plots_sis import cascade_size_plot
 
-sn = pickle.load(open('results/sto_no_reconnect.pickle', 'rb'))
+sn = pickle.load(open('results/ramon_sto_no_reconnect.pickle', 'rb'))
 sn.plot()
 
 # origins = cascade_fake_origins(graph)
