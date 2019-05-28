@@ -38,6 +38,8 @@ class SecNet:
         self.defaulted_density = []
         self.nodes_per_sector = self.get_nodes_per_sector()
 
+        self.iteration = 0
+
         if default_delay != 0:
             self.init_default_delay()
 
@@ -77,6 +79,7 @@ class SecNet:
 
         cur_density = total_p / graph.number_of_nodes()
         self.defaulted_density.append(cur_density)
+        self.iteration += 1
 
     def update_default(self, node):
         graph = self.graph
@@ -84,6 +87,8 @@ class SecNet:
         defaulted_p = node['defaulted']
         if defaulted_p:
             node['total_defaulted_turns'] += 1
+            if node['first_defaulted_at'] == -1:
+                node['first_defaulted_at'] = self.iteration
 
         neighbors = graph[node['id']]
         weights = np.array([neighbor['weight'] for neighbor in neighbors.values()])

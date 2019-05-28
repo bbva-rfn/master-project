@@ -23,6 +23,7 @@ for node_id in all_node_ids:
         'id': node_id,
         'defaulted': np.random.choice([0., 1.], p=[1 - defaulted_prob, defaulted_prob]),
         'total_defaulted_turns': 0,
+        'first_defaulted_at': -1,
         'sector': np.random.randint(num_sectors),
         'all_connected_nodes': connected_node_ids
     }
