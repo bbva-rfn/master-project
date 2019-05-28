@@ -41,6 +41,13 @@ class SecNet:
         if default_delay != 0:
             self.init_default_delay()
 
+    @staticmethod
+    def apply_p_policy(p, is_stochastic):
+        if is_stochastic:
+            return 1 if np.random.random() < p else 0
+
+        return p
+
     def init_default_delay(self):
         set_node_attributes(self.graph, 0, name='defaulted_turns')
 
@@ -75,11 +82,15 @@ class SecNet:
         graph = self.graph
 
         defaulted_p = node['defaulted']
+        if defaulted_p:
+            node['total_defaulted_turns'] += 1
+
         neighbors = graph[node['id']]
         weights = np.array([neighbor['weight'] for neighbor in neighbors.values()])
         neighbor_nodes = [graph.nodes[node_id] for node_id in list(neighbors)]
         new_defaulted_p = self.calculate_p(defaulted_p, neighbor_nodes, weights)
         node['defaulted'] = new_defaulted_p
+        self.update_defaulted_turns(node)
 
         self.reconnect_neighbors(node, neighbor_nodes)
 
@@ -152,21 +163,7 @@ class SecNet:
         if reconnection_policy == ReconnectionPolicy.STRONG:
             reconnect = neighbor['defaulted'] == 1 or neighbor['defaulted'] > node['defaulted']
 
-        if reconnect and self.default_delay:
-            neighbor['defaulted_turns'] += 1
-            print(neighbor['defaulted_turns'])
-
-        if not reconnect:
-                neighbor['defaulted_turns'] = 0
-
         return reconnect and not wait
-
-    @staticmethod
-    def apply_p_policy(p, is_stochastic):
-        if is_stochastic:
-            return 1 if np.random.random() < p else 0
-
-        return p
 
     def calculate_q(self, nodes, weights):
         defaulted_probs = []
@@ -190,3 +187,12 @@ class SecNet:
                 nodes_per_sector[sector] = np.array([node_id])
 
         return nodes_per_sector
+
+    def update_defaulted_turns(self, node):
+        if self.default_delay == 0:
+            return None
+
+        if node['defaulted'] == 1:
+            node['defaulted_turns'] += 1
+        else:
+            node['defaulted_turns'] = 0
