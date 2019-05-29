@@ -26,7 +26,7 @@ class ReconnectionPolicy(Enum):
 class SecNet:
     def __init__(self, graph: DiGraph, mu: float, beta: float, stochastic: bool = True,
                  reconnection_policy: ReconnectionPolicy = ReconnectionPolicy.NONE,
-                 default_delay=0):
+                 default_delay=0, weight_transfer=False):
         self.graph = graph.copy()
 
         self.mu = mu
@@ -34,9 +34,10 @@ class SecNet:
         self.stochastic = stochastic
         self.reconnection_policy = reconnection_policy
         self.default_delay = default_delay
+        self.weight_transfer = weight_transfer
 
         self.defaulted_density = []
-        self.nodes_per_sector = self.get_nodes_per_sector()
+        self.nodes_per_sector = self.group_by_sector(self.graph.nodes)
 
         self.iteration = 0
 
@@ -92,28 +93,33 @@ class SecNet:
 
         neighbors = graph[node['id']]
         weights = np.array([neighbor['weight'] for neighbor in neighbors.values()])
-        neighbor_nodes = [graph.nodes[node_id] for node_id in list(neighbors)]
-        new_defaulted_p = self.calculate_p(defaulted_p, neighbor_nodes, weights)
+        neighbor_node_ids = [node_id for node_id in list(neighbors)]
+        new_defaulted_p = self.calculate_p(defaulted_p, neighbor_node_ids, weights)
         node['defaulted'] = new_defaulted_p
         self.update_defaulted_turns(node)
 
-        self.reconnect_neighbors(node, neighbor_nodes)
+        self.reconnect_neighbors(node, neighbor_node_ids)
 
-    def reconnect_neighbors(self, node, neighbor_nodes):
+    def reconnect_neighbors(self, node, neighbor_node_ids):
         if self.reconnection_policy == ReconnectionPolicy.NONE:
             return None
 
-        for neighbor in neighbor_nodes:
-            if self.should_reconnect(node, neighbor, self.reconnection_policy):
-                self.reconnect(node, neighbor)
+        neighbor_nodes_by_sector = self.group_by_sector(neighbor_node_ids) if self.weight_transfer else None
 
-    def reconnect(self, node, neighbor):
+        for neighbor_id in neighbor_node_ids:
+            neighbor = self.graph.nodes[neighbor_id]
+            if self.should_reconnect(node, neighbor, self.reconnection_policy):
+                self.reconnect(node, neighbor, neighbor_nodes_by_sector)
+
+    def reconnect(self, node, neighbor, neighbor_nodes_by_sector):
         graph = self.graph
         weight = graph[node['id']][neighbor['id']]['weight']
         graph.remove_edge(node['id'], neighbor['id'])
         eligible_nodes = self.get_reconnectable_nodes(node, neighbor)
 
-        if eligible_nodes.size == 0:
+        if self.transfer_weight(node, neighbor, neighbor_nodes_by_sector, weight):
+            pass
+        elif eligible_nodes.size == 0:
             edges = graph[node['id']]
             self.normalize_edges(edges)
         else:
@@ -121,6 +127,19 @@ class SecNet:
             graph.add_edge(node['id'], new_node['id'], weight=weight)
 
             node['all_connected_nodes'] = np.append(node['all_connected_nodes'], new_node['id'])
+
+    def transfer_weight(self, node, neighbor, neighbor_nodes_by_sector, weight):
+        if not self.weight_transfer:
+            return False
+
+        neighbor_sector = neighbor['sector']
+        neighbor_nodes_in_sector = neighbor_nodes_by_sector[neighbor_sector]
+        if len(neighbor_nodes_in_sector) == 0:
+            return False
+
+        new_weight = weight / len(neighbor_nodes_in_sector)
+        edges = [(node['id'], n_id, new_weight) for n_id in neighbor_nodes_in_sector]
+        self.graph.add_weighted_edges_from(edges)
 
     @staticmethod
     def normalize_edges(edges):
@@ -149,9 +168,9 @@ class SecNet:
 
         return np.array([node for node in eligible_nodes if node['defaulted'] <= defaulted_p])
 
-    def calculate_p(self, defaulted_p, neighbor_nodes, weights):
+    def calculate_p(self, defaulted_p, neighbor_node_ids, weights):
         mu = self.mu
-        q = self.calculate_q(neighbor_nodes, weights)
+        q = self.calculate_q(neighbor_node_ids, weights)
 
         new_p = (1 - q) * (1 - defaulted_p) + (1 - mu) * defaulted_p + mu * (1 - q) * defaulted_p
         new_p = self.apply_p_policy(new_p, self.stochastic)
@@ -170,19 +189,19 @@ class SecNet:
 
         return reconnect and not wait
 
-    def calculate_q(self, nodes, weights):
+    def calculate_q(self, node_ids, weights):
         defaulted_probs = []
-        for node in nodes:
-            defaulted_probs.append(node['defaulted'])
+        for node_id in node_ids:
+            defaulted_probs.append(self.graph.nodes[node_id]['defaulted'])
 
         defaulted_probs = np.array(defaulted_probs)
         return np.prod(1 - self.beta * weights * defaulted_probs)
 
-    def get_nodes_per_sector(self):
+    def group_by_sector(self, node_ids):
         graph = self.graph
         nodes_per_sector = {}
 
-        for node_id in graph:
+        for node_id in node_ids:
             node = graph.nodes[node_id]
 
             sector = node['sector']
