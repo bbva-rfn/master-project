@@ -63,10 +63,15 @@ class SecNet:
                 print_progress(it + 1, iterations)
             self.iterate()
 
-    def plot(self):
+    def plot(self, title, save = False, namefile = 'density_by_policy'):
         fig = figure()
         ax = fig.add_subplot(111)
         ax.plot(self.defaulted_density)
+        ax.set_xlabel('Iterations')
+        ax.set_ylabel('Density')
+        ax.set_title(title)
+        if save:
+            fig.savefig(namefile)
         show()
 
     def iterate(self):
