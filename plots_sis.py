@@ -4,7 +4,7 @@ import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
-from SecNet import SecNet
+from SecNet import SecNet, ReconnectionPolicy
 from networkx import DiGraph
 
 
@@ -20,13 +20,36 @@ def construct_probs_by_sector(density_probs):
     return probs
 
 
-def beta_plot(g: DiGraph, mu=0.4, iterations=75):
+def beta_plot(g: DiGraph, 
+              mu = 0.4, 
+              iterations = 75, 
+              file_plot=  'images/prob_by_sector',
+              policy = 'SOFT',
+              default_delay = 4):
+
     betas = np.arange(0, 1, 0.1)
 
     density_probs = []
 
     for beta in betas:
-        sn = SecNet(g, mu, beta)
+        if policy == 'NONE':
+            sn = SecNet(g, mu, beta, 
+                        reconnection_policy = ReconnectionPolicy.NONE, 
+                        default_delay = default_delay, weight_transfer = False)
+        elif policy == 'RANDOM':
+            sn = SecNet(g, mu, beta, 
+                        reconnection_policy = ReconnectionPolicy.RANDOM, 
+                        default_delay = default_delay, weight_transfer = False)
+        elif policy == 'SOFT':
+            sn = SecNet(g, mu, beta, 
+                        reconnection_policy = ReconnectionPolicy.SOFT, 
+                        default_delay = default_delay, weight_transfer = False)
+        elif policy == 'STRONG':
+            sn = SecNet(g, mu, beta, 
+                        reconnection_policy = ReconnectionPolicy.STRONG, 
+                        default_delay = default_delay, weight_transfer = False)
+        else:  return('policy not found.')
+            
         sn.run(iterations)
         # sn.graph to access the copied graph
         prob_by_sector = np.zeros(17)
@@ -48,9 +71,13 @@ def beta_plot(g: DiGraph, mu=0.4, iterations=75):
     plt.figure()
     for prob in probs_by_sector:
         plt.plot(betas, prob)
+        plt.legend(loc='upper left')   
+    plt.title('Random sample with %s reconnection policy' %policy)
+    plt.legend(loc='upper left')    
     plt.xlabel('betas')
     plt.ylabel('density prob')
-    plt.savefig('images/prob_by_sector.png')
+    file  =  file_plot + policy + str(default_delay)+'.png'
+    plt.savefig(file)
     plt.show()
 
 
