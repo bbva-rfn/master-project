@@ -42,13 +42,15 @@ def check_cascade_size_recursive(graph: DiGraph):
     return sizes
 
 
-def full_check_cascade_size_recursive(repetitions=25,mu=0.2,beta=0.6,delay=2,weight_transfer=False):
+def full_check_cascade_size_recursive(repetitions=25,mu=0.2,beta=0.6,delay=2,weight_transfer=False,
+                                      show=True):
     sizes = []
     for i in range(repetitions):
         g = pickle.load(open('graphs/new.pickle', 'rb'))
         sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM, default_delay=delay, weight_transfer=weight_transfer)
         sn.run(100)
-        sn.plot()
+        if show:
+            sn.plot()
         sizes.append(check_cascade_size_recursive(sn.graph))
     
     return sizes
@@ -61,7 +63,7 @@ def lists_to_list(l):
     return flat_list
 
 
-def cascade_size_plot(sizes, n,filename='images/cascade_size.png'):  # n is the number of nodes, if graph is not passed then we need it as argument
+def cascade_size_plot(sizes, n,filename='images/cascade_size.png',scatter=False):  # n is the number of nodes, if graph is not passed then we need it as argument
     if type(sizes[0]) == int and len(sizes) > 1:  # meaning there is only one list
         size = sizes
         
@@ -88,7 +90,11 @@ def cascade_size_plot(sizes, n,filename='images/cascade_size.png'):  # n is the 
     plt.ylabel('1-P(cs<Cs)')
     plt.xscale('log')
     plt.yscale('log')
-    plt.plot(np.arange(0, max_size + 1), inv_cum)
+    if scatter:
+        plt.scatter(np.arange(0, max_size + 1), inv_cum)
+    else:
+        plt.plot(np.arange(0, max_size + 1), inv_cum)
+    
     plt.savefig(filename)
     plt.show()
         
