@@ -4,6 +4,8 @@
 from networkx import DiGraph
 import pickle
 from SecNet import SecNet, ReconnectionPolicy
+import matplotlib.pyplot as plt
+import numpy as np
 
 #as we store at which iteration they become infected it is trivial
 def cascade_origins(graph: DiGraph):
@@ -51,4 +53,42 @@ def full_check_cascade_size_recursive(repetitions=25,mu=0.2,beta=0.6,delay=2,wei
     
     return sizes
         
+
+#Modification and better implementation of ploting cascade sizes
+    
+def lists_to_list(l):
+    flat_list = [item for sublist in l for item in sublist]
+    return flat_list
+
+
+def cascade_size_plot(sizes, n,filename='images/cascade_size.png'):  # n is the number of nodes, if graph is not passed then we need it as argument
+    if type(sizes[0]) == int and len(sizes) > 1:  # meaning there is only one list
+        size = sizes
+        
+    elif type(sizes[0])==list:
+        size = lists_to_list(sizes)
+            
+    else:
+        print('Error-Type not understood') 
+        
+    max_size = max(size)
+    prob = []
+    for i in range(0, max_size + 1):
+        p = 0
+        for j in range(len(size)):
+            if (i == size[j]):
+                p += 1
+        p = p / n
+        prob.append(p)
+    # now we have a list of probabilities and we need to do cumulative distribution
+    inv_cum = 1 - np.cumsum(prob)
+
+    plt.figure()
+    plt.xlabel('cs')
+    plt.ylabel('1-P(cs<Cs)')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.plot(np.arange(0, max_size + 1), inv_cum)
+    plt.savefig(filename)
+    plt.show()
         
