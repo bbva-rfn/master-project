@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 #analizing cascades
-
+'''
 from cascades import full_check_cascade_size_recursive,cascade_size_plot
 
-#sizes = full_check_cascade_size_recursive(repetitions=2,delay=2)
-#print(sizes)
+sizes = full_check_cascade_size_recursive(repetitions=2,delay=2)
+print(sizes)
 
-#cascade_size_plot(sizes,1000,filename='images/cascade_plot_delay2.png')
+cascade_size_plot(sizes,1000,filename='images/cascade_plot_delay2.png')
 
 delays = [2,4,6]
 
@@ -18,3 +18,9 @@ for delay in delays:
     print('One less')
 
 print('Yeah!')
+'''
+
+from cascades import nice_cascade_plot_comparison
+
+nice_cascade_plot_comparison(repetitions=2)
+

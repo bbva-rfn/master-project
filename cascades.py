@@ -97,4 +97,38 @@ def cascade_size_plot(sizes, n,filename='images/cascade_size.png',scatter=False)
     
     plt.savefig(filename)
     plt.show()
+    
+def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n=1000,
+                                 colors=['r','b','g'],
+                                 filename='images/nice_cascade_plot_comparison.png'):
+    plt.figure()
+    plt.xlabel('cs')
+    plt.ylabel('1-P(cs<Cs)')
+    plt.xscale('log')
+    plt.yscale('log')
+    k = 0
+    for delay in delays:
+        sizes = full_check_cascade_size_recursive(repetitions=repetitions,mu=mu,beta=beta,
+                                                  delay = delay ,show=False)
+        size = lists_to_list(sizes)
+        max_size = max(size)
+        prob = []
+        for i in range(max_size + 1):
+            p = 0
+            for j in range(len(size)):
+                if (i == size[j]):
+                    p += 1
+            p = p / n
+            prob.append(p)
+        # now we have a list of probabilities and we need to do cumulative distribution
+        inv_cum = 1 - np.cumsum(prob)
+    
+        lab = 'delay '+str(delay)
+        plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
+        k+=1
+    plt.legend()
+    plt.savefig(filename)
+    plt.show()
+    
+    
         
