@@ -22,5 +22,5 @@ print('Yeah!')
 
 from cascades import nice_cascade_plot_comparison
 
-nice_cascade_plot_comparison(repetitions=2)
+nice_cascade_plot_comparison(repetitions=25,filename='images/nice_cascade_comparison.png')
 
