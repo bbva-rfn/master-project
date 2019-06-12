@@ -54,14 +54,14 @@ class SecNet:
     def init_default_delay(self):
         set_node_attributes(self.graph, 0, name='defaulted_turns')
 
-    def run(self, max_iter=100, stddev_iteration_range=10, min_stdev=None, burn_in=0, verbose=True):
+    def run(self, max_iter=100, varcoeff_iteration_range=10, variation_coeff=None, burn_in=0, verbose=True):
         """
         Runs the simulation.
 
         :param max_iter: the maximum number of iterations that the simulation is allowed to run.
-        :param stddev_iteration_range: number of iterations to calculate the standard deviation over.
-        :param min_stdev: if set, the algorithm stops automatically if the standard deviation
-            of the last `stddev_iteration_range` iterations is less than the given number.
+        :param varcoeff_iteration_range: number of iterations to calculate the standard deviation over.
+        :param variation_coeff: if set, the algorithm stops if the variation coeffient of the last
+            `stddev_iteration_range` iterations is less than the given number.
         :param burn_in: if set together with `min_stddev`, the algorithm will at least this number of iterations
             regardless if the standard deviation stopping criterion is met.
         :param verbose: show a progress bar if set `True`.
@@ -72,7 +72,11 @@ class SecNet:
         for it in range(max_iter):
             if verbose:
                 print_progress(it + 1, max_iter)
-            if self.should_stop(stddev_iteration_range, min_stdev) and it > burn_in:
+            if variation_coeff is not None and self.should_stop(varcoeff_iteration_range,
+                                                                variation_coeff) and it > burn_in:
+                if verbose:
+                    print_progress(max_iter, max_iter)
+                    print("Premature stop, threshold reached")
                 break
 
             self.iterate()
@@ -240,8 +244,18 @@ class SecNet:
         else:
             node['defaulted_turns'] = 0
 
-    def should_stop(self, stddev_iteration_range, min_stdev):
-        defaulted_densities = self.defaulted_density[-stddev_iteration_range:]
-        stdev = np.std(defaulted_densities)
+    def should_stop(self, varcoeff_iteration_range, min_variation_coeff):
+        if len(self.defaulted_density) < varcoeff_iteration_range:
+            return False
 
-        return stdev < min_stdev
+        defaulted_densities = self.defaulted_density[-varcoeff_iteration_range:]
+        mean_defaulted_densities = np.mean(defaulted_densities)
+        std_defaulted_densities = np.std(defaulted_densities)
+
+        # Check if the defaulted densities tend to 0
+        if mean_defaulted_densities < 10e-3 and std_defaulted_densities < 10e-4:
+            return True
+
+        var_coeff = std_defaulted_densities / mean_defaulted_densities
+
+        return var_coeff < min_variation_coeff
