@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # risk functions implementation
 
-from risk_functions import risk_for_me_one,risk_for_me_one_strict,risk_for_me_some
+#from risk_functions import risk_for_me_one,risk_for_me_one_strict,risk_for_me_some
+from cascades import risk_cascades
 import pickle
 
 g = pickle.load(open('graphs/new.pickle', 'rb'))
@@ -19,7 +20,11 @@ risk = risk_for_me_one(g,4,117,repetitions=2)
 print("Lax risk",risk)
 risk = risk_for_me_one_strict(g,4,117,repetitions=2)
 print("Strict risk",risk)
-'''
+
 
 risk = risk_for_me_some(g,4,[7,117,45,23],repetitions=3)
 print("Risk",risk)
+'''
+
+risk = risk_cascades(g,4)
+print("The most probable cascade size for every delay is",risk)
