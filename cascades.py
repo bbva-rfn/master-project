@@ -135,7 +135,7 @@ def cascade_size_plot(sizes, n,filename='images/cascade_size.png',scatter=False)
     plt.show()
     
 def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n=1000,
-                                 colors=['r','b','g'],
+                                 colors=['r','b','g'],policy = 'RANDOM',
                                  filename='images/nice_cascade_plot_comparison.png'):
     plt.figure()
     plt.xlabel('cs')
@@ -145,7 +145,7 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
     k = 0
     for delay in delays:
         sizes = full_check_cascade_size_recursive(repetitions=repetitions,mu=mu,beta=beta,
-                                                  delay = delay ,show=False)
+                                                  policy = policy, delay = delay ,show=False)
         size = lists_to_list(sizes)
         max_size = max(size)
         prob = []
