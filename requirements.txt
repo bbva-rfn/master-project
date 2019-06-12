@@ -1,3 +1,4 @@
+joblib
 cycler==0.10.0
 decorator==4.4.0
 kiwisolver==1.1.0

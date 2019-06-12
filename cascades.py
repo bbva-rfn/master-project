@@ -6,6 +6,7 @@ from SecNet import SecNet, ReconnectionPolicy
 import matplotlib.pyplot as plt
 import numpy as np
 from risk_functions import set_initial_defaults
+from joblib import Parallel, delayed
 
 
 # as we store at which iteration they become infected it is trivial
@@ -44,29 +45,31 @@ def check_cascade_size_recursive(graph: DiGraph):
     return sizes
 
 
-def full_check_cascade_size_recursive(graph:DiGraph,repetitions=25,max_iterations=100,
+def full_check_cascade_size_recursive(graph: DiGraph, repetitions=25, max_iterations=100,
                                       mu=0.2, beta=0.6, delay=2, weight_transfer=False,
                                       show=True, policy='RANDOM'):
-    sizes = []
-    for i in range(repetitions):
-        g = graph.copy()
-
-        if policy == 'RANDOM':
-            sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
-                        default_delay=delay, weight_transfer=weight_transfer)
-        elif policy == 'SOFT':
-            sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
-                        default_delay=delay, weight_transfer=weight_transfer)
-        else:
-            print('Policy not understood')
-            return 0
-
-        sn.run(max_iterations)
-        if show:
-            sn.plot()
-        sizes.append(check_cascade_size_recursive(sn.graph))
-
+    sizes = Parallel(n_jobs=-1)(delayed(run_simulation)(graph, mu, beta, policy, delay, weight_transfer, max_iterations, show) for _ in range(repetitions))
     return sizes
+
+
+def run_simulation(graph, mu, beta, policy, delay, weight_transfer, max_iterations, show):
+    g = graph.copy()
+
+    if policy == 'RANDOM':
+        sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                    default_delay=delay, weight_transfer=weight_transfer)
+    elif policy == 'SOFT':
+        sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
+                    default_delay=delay, weight_transfer=weight_transfer)
+    else:
+        print('Policy not understood')
+        return 0
+
+    sn.run(max_iterations)
+    if show:
+        sn.plot()
+
+    return check_cascade_size_recursive(sn.graph)
 
 
 # modification for a general graph with option to change initial defaulted nodes
@@ -140,7 +143,7 @@ def cascade_size_plot(sizes, n, filename='images/cascade_size.png',
     plt.show()
 
 
-def nice_cascade_plot_comparison(graph:DiGraph,repetitions=25, mu=0.2, beta=0.6, delays=[2, 4, 6], n=1000,
+def nice_cascade_plot_comparison(graph: DiGraph, repetitions=25, mu=0.2, beta=0.6, delays=[2, 4, 6], n=1000,
                                  colors=['r', 'b', 'g'], policy='RANDOM',
                                  filename='images/nice_cascade_plot_comparison.png'):
     plt.figure()
@@ -150,7 +153,7 @@ def nice_cascade_plot_comparison(graph:DiGraph,repetitions=25, mu=0.2, beta=0.6,
     plt.yscale('log')
     k = 0
     for delay in delays:
-        sizes = full_check_cascade_size_recursive(graph,repetitions=repetitions, mu=mu, beta=beta,
+        sizes = full_check_cascade_size_recursive(graph, repetitions=repetitions, mu=mu, beta=beta,
                                                   policy=policy, delay=delay, show=False)
         size = lists_to_list(sizes)
         max_size = max(size)
@@ -232,24 +235,25 @@ def most_probable(probabilities, max_size):
         add += i * probabilities[i]
     return add
 
-def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100, 
+
+def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
                             mu=0.2, beta=0.6,
                             policy='RANDOM', delays=[2, 4, 6], weight_transfer=False,
                             filename='images/risk_cascades.png'):
     total_sizes = []
     for delay in delays:
         sizes = full_check_cascade_size_recursive(graph, repetitions=repetitions,
-                                                        max_iterations=max_iterations, mu=mu,
-                                                        beta=beta, policy=policy,
-                                                        delay=delay, show=False)
+                                                  max_iterations=max_iterations, mu=mu,
+                                                  beta=beta, policy=policy,
+                                                  delay=delay, show=False)
         size = lists_to_list(sizes)
         total_sizes.append(size)
-        
+
     return total_sizes
 
-def plot_cascade_sizes(sizes:list,delays=[2,4,6],colors = ['r','g','b'],
+
+def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
                        filename='images/cascades/comparison_plot.png'):
-    
     plt.figure()
     plt.xlabel('Cascade size (Cs)')
     plt.ylabel('1-P(cs<Cs)')
@@ -279,4 +283,3 @@ def plot_cascade_sizes(sizes:list,delays=[2,4,6],colors = ['r','g','b'],
     plt.savefig(filename)
     plt.show()
     return max_prob
-        
