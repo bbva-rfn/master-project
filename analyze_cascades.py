@@ -26,5 +26,6 @@ nice_cascade_plot_comparison(repetitions=25,
                              beta = 0.4,
                              delays = [2,3,4],
                              policy = 'SOFT',
-                             filename='images/nice_cascade_comparison_SOFT2.png')
+                             filename='images/nice_cascade_comparison_SOFT_ratio2.png')
+
 

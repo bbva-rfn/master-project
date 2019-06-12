@@ -177,7 +177,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
                                                   filename='images/nice_cascade_plot_change_default.png'):
     max_prob = []
     plt.figure()
-    plt.xlabel('cs')
+    plt.xlabel('Cascade size (Cs)')
     plt.ylabel('1-P(cs<Cs)')
     plt.xscale('log')
     plt.yscale('log')
