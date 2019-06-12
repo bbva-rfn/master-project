@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#analizing cascades
+# analizing cascades
 '''
 from cascades import full_check_cascade_size_recursive,cascade_size_plot
 
@@ -23,9 +23,7 @@ print('Yeah!')
 from cascades import nice_cascade_plot_comparison
 
 nice_cascade_plot_comparison(repetitions=25,
-                             beta = 0.4,
-                             delays = [2,3,4],
-                             policy = 'SOFT',
+                             beta=0.4,
+                             delays=[2, 3, 4],
+                             policy='SOFT',
                              filename='images/nice_cascade_comparison_SOFT_ratio2.png')
-
-
