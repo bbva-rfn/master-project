@@ -54,16 +54,30 @@ class SecNet:
     def init_default_delay(self):
         set_node_attributes(self.graph, 0, name='defaulted_turns')
 
-    def run(self, iterations=100, verbose=True):
+    def run(self, max_iter=100, stddev_iteration_range=10, min_stdev=None, burn_in=0, verbose=True):
+        """
+        Runs the simulation.
+
+        :param max_iter: the maximum number of iterations that the simulation is allowed to run.
+        :param stddev_iteration_range: number of iterations to calculate the standard deviation over.
+        :param min_stdev: if set, the algorithm stops automatically if the standard deviation
+            of the last `stddev_iteration_range` iterations is less than the given number.
+        :param burn_in: if set together with `min_stddev`, the algorithm will at least this number of iterations
+            regardless if the standard deviation stopping criterion is met.
+        :param verbose: show a progress bar if set `True`.
+        """
         if verbose:
             print()
 
-        for it in range(iterations):
+        for it in range(max_iter):
             if verbose:
-                print_progress(it + 1, iterations)
+                print_progress(it + 1, max_iter)
+            if self.should_stop(stddev_iteration_range, min_stdev) and it > burn_in:
+                break
+
             self.iterate()
 
-    def plot(self, title='Title', save = False, namefile = 'density_by_policy'):
+    def plot(self, title='Title', save=False, file_name='density_by_policy'):
         fig = figure()
         ax = fig.add_subplot(111)
         ax.plot(self.defaulted_density)
@@ -71,7 +85,7 @@ class SecNet:
         ax.set_ylabel('Density')
         ax.set_title(title)
         if save:
-            fig.savefig(namefile)
+            fig.savefig(file_name)
         show()
 
     def iterate(self):
@@ -225,3 +239,9 @@ class SecNet:
             node['defaulted_turns'] += 1
         else:
             node['defaulted_turns'] = 0
+
+    def should_stop(self, stddev_iteration_range, min_stdev):
+        defaulted_densities = self.defaulted_density[-stddev_iteration_range:]
+        stdev = np.std(defaulted_densities)
+
+        return stdev < min_stdev
