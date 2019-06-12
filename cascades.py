@@ -164,7 +164,7 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
         k+=1
     plt.legend()
     plt.tight_layout()
-    plt.tittle('Inverse comulative probability of Cascade size %s' %policy)
+    plt.title('Inverse comulative probability of Cascade size %s' %policy)
     plt.savefig(filename)
     plt.show()
 
