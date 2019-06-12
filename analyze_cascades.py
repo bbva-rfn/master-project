@@ -23,8 +23,9 @@ print('Yeah!')
 from cascades import nice_cascade_plot_comparison
 
 nice_cascade_plot_comparison(repetitions=25,
+                             beta = 0.4,
                              delays = [2,3,4],
-                             beta=0.4,
                              policy = 'SOFT',
                              filename='images/nice_cascade_comparison_SOFT_ratio2.png')
+
 
