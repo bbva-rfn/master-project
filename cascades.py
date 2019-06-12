@@ -165,13 +165,14 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
     plt.legend()
     plt.savefig(filename)
     plt.show()
-    
+
+ 
     
 def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetitions=25,
                                                   max_iterations = 100,mu=0.2,beta=0.6,
                                                   delays=[2,4,6],n=1000,
                                                   colors=['r','b','g'],policy='RANDOM',
-                                                  filename='images/nice_cascade_plot_comparison.png'):
+                                                  filename='images/nice_cascade_plot_change_default.png'):
     maxx=0
     plt.figure()
     plt.xlabel('cs')
