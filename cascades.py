@@ -163,6 +163,7 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
         plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
         k+=1
     plt.legend()
+    fig.tight_layout()
     plt.savefig(filename)
     plt.show()
     
@@ -171,7 +172,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
                                                   max_iterations = 100,mu=0.2,beta=0.6,
                                                   delays=[2,4,6],n=1000,
                                                   colors=['r','b','g'],policy='RANDOM',
-                                                  filename='images/nice_cascade_plot_comparison.png'):
+                                                  filename='images/nice_cascade_plot_change_default.png'):
     maxx=0
     plt.figure()
     plt.xlabel('cs')
@@ -203,8 +204,16 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
         plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
         k+=1
     plt.legend()
+    fig.tight_layout()
     plt.savefig(filename)
     plt.show()
     return maxx
     
+def risk_cascades(graph:DiGraph,node_id,repetitions=25,iterations=100,mu=0.2,beta=0.6,
+                  delays=[2,4,6],weight_transfer=False,filename='images/risk_cascades.png'):
         
+        risk = nice_cascade_plot_comparison_setting_defaults(graph,node_id,repetitions,iterations,
+                                                      mu,beta,delays,
+                                                      n=graph.num_nodes(),filename=filename)
+        
+        return risk     
