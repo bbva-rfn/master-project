@@ -26,5 +26,10 @@ risk = risk_for_me_some(g,4,[7,117,45,23],repetitions=3)
 print("Risk",risk)
 '''
 
-risk = risk_cascades(g,4)
+risk = risk_cascades(g,4,filename="images/risk_cascades.png")
 print("The most probable cascade size for every delay is",risk)
+
+#For company 4
+#Delay 2 -- 0.006
+#Delay 4 -- 2.17
+#Delay 6 -- 2.56
