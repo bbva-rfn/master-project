@@ -163,7 +163,7 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
         plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
         k+=1
     plt.legend()
-    fig.tight_layout()
+    plt.tight_layout()
     plt.savefig(filename)
     plt.show()
 
@@ -205,7 +205,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
         plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
         k+=1
     plt.legend()
-    fig.tight_layout()
+    plt.tight_layout()
     plt.savefig(filename)
     plt.show()
     return maxx
