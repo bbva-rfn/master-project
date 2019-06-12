@@ -138,7 +138,7 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
                                  colors=['r','b','g'],policy = 'RANDOM',
                                  filename='images/nice_cascade_plot_comparison.png'):
     plt.figure()
-    plt.xlabel('cs')
+    plt.xlabel('Cascade size (Cs)')
     plt.ylabel('1-P(cs<Cs)')
     plt.xscale('log')
     plt.yscale('log')
