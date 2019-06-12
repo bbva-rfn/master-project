@@ -12,9 +12,9 @@ g = pickle.load(open('graphs/new.pickle', 'rb'))
 #beta_plot(g,  mu = 0.2 , iterations = 75, policy = 'RANDOM',default_delay=8)
 
 density_plot(g, 
-             mu = 0.4, 
+             mu = 0.2, 
              beta = 0.6,
-             iterations = 75,)
+             iterations = 200)
          
 
 

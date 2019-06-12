@@ -111,11 +111,11 @@ def cascade_size_plot(sizes, n):  # n is the number of nodes, if graph is not pa
 def density_plot(g:DiGraph, 
                   mu = 0.4, 
                   beta = 0.6,
-                  iterations = 75, 
-                  file_plot=  'images/density_by_policy'):
+                  iterations = 200,
+                  file_plot= 'images/density/density_by_policy'):
     
         for policy in ['SOFT','RANDOM','NONE']:
-            for default_delay in [0,3,6]:
+            for default_delay in [2,4,6,8]:
                 if policy == 'NONE':
                     sn = SecNet(g, mu = mu, beta =beta, 
                                 reconnection_policy = ReconnectionPolicy.NONE, 
@@ -136,7 +136,7 @@ def density_plot(g:DiGraph,
                 sn.run(iterations)    
                 sn.plot('Defaulted companies for %s' %policy,
                         save = True ,
-                        namefile =  file)
+                        file_name =  file)
                 
                         
                     
