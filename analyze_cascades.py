@@ -24,6 +24,7 @@ from cascades import nice_cascade_plot_comparison
 
 nice_cascade_plot_comparison(repetitions=25,
                              beta=0.4,
-                             delays=[2, 3, 4],
+                             delays=[2, 3, 4, 5, 6],
+                             colors = ['r', 'b', 'g','k','m'],
                              policy='SOFT',
-                             filename='images/nice_cascade_comparison_SOFT_ratio2.png')
+                             filename='images/cascades/beta_0.4/comparison_SOFT.png')
