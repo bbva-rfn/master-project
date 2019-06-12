@@ -88,6 +88,7 @@ class SecNet:
         ax.set_xlabel('Iterations')
         ax.set_ylabel('Density')
         ax.set_title(title)
+        fig.tight_layout()
         if save:
             fig.savefig(file_name)
         show()
