@@ -12,7 +12,14 @@ def set_initial_defaults(graph:DiGraph,node_id):
         else:
             node['defaulted'] = 0
 
-    
+def set_initial_defaults_several(graph:DiGraph,node_ids:list):
+    for node_id in graph:
+        node = graph.nodes[node_id]
+        if node_id in node_ids:
+            node['defaulted']=1
+        else:
+            node['defaulted']=0
+        
 def risk_for_me_all(graph:DiGraph,node_id,iterations=70,mu=0.2,beta=0.6,delay=2,weight_transfer=False):
     risks = []
     for node_i in graph:
@@ -71,6 +78,27 @@ def risk_for_me_one_strict(graph:DiGraph,node_id_me,node_id_other,repetitions=20
             risk = 0
         else:
             risk = 1
+        risks.append(risk)
+    return np.mean(risks)
+
+
+def risk_for_me_some(graph:DiGraph,node_id_me,node_id_others:list,repetitions=20,
+                           iterations=100,mu=0.2,beta=0.6,delay=2,
+                           weight_transfer=False,strict=False):
+    risks = []
+    for i in range(repetitions):
+        set_initial_defaults_several(graph,node_id_others)
+        sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                    default_delay=delay, weight_transfer=weight_transfer)
+        sn.run(iterations)
+        risk = sn.graph.nodes[node_id_me]['first_defaulted_at']
+        if risk == -1:
+            risk = 0
+        else:
+            if(strict):
+                risk = 1
+            else:
+                risk = 1-float(risk/iterations)
         risks.append(risk)
     return np.mean(risks)
 
