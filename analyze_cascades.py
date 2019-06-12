@@ -22,5 +22,7 @@ print('Yeah!')
 
 from cascades import nice_cascade_plot_comparison
 
-nice_cascade_plot_comparison(repetitions=25,filename='images/nice_cascade_comparison.png')
+nice_cascade_plot_comparison(repetitions=25,
+                             delays = [2,3,4],
+                             filename='images/nice_cascade_comparison2.png')
 
