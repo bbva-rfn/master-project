@@ -2,7 +2,6 @@
 # adapting the code of cascades_old to the new general algorithm
 
 from networkx import DiGraph
-import pickle
 from SecNet import SecNet, ReconnectionPolicy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -240,7 +239,7 @@ def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
     total_sizes = []
     for delay in delays:
         sizes = full_check_cascade_size_recursive(graph, repetitions=repetitions,
-                                                        iterations=max_iterations, mu=mu,
+                                                        max_iterations=max_iterations, mu=mu,
                                                         beta=beta, policy=policy,
                                                         delay=delay, show=False)
         size = lists_to_list(sizes)
