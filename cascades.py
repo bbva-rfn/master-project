@@ -174,7 +174,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
                                                   delays=[2,4,6],n=1000,
                                                   colors=['r','b','g'],policy='RANDOM',
                                                   filename='images/nice_cascade_plot_change_default.png'):
-    maxx=0
+    max_prob = []
     plt.figure()
     plt.xlabel('cs')
     plt.ylabel('1-P(cs<Cs)')
@@ -188,8 +188,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
                                                        delay = delay ,show=False)
         size = lists_to_list(sizes)
         max_size = max(size)
-        if max_size > maxx:
-            maxx = max_size+0.
+        np.sqrt(np.sum(size))
         prob = []
         for i in range(max_size + 1):
             p = 0
@@ -200,7 +199,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
             prob.append(p)
         # now we have a list of probabilities and we need to do cumulative distribution
         inv_cum = 1 - np.cumsum(prob)
-    
+        max_prob.append([delay,most_probable(prob,max_size)])
         lab = 'delay '+str(delay)
         plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
         k+=1
@@ -208,13 +207,21 @@ def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetit
     plt.tight_layout()
     plt.savefig(filename)
     plt.show()
-    return maxx
+    return max_prob
     
 def risk_cascades(graph:DiGraph,node_id,repetitions=25,iterations=100,mu=0.2,beta=0.6,
-                  delays=[2,4,6],weight_transfer=False,filename='images/risk_cascades.png'):
+                  policy = 'RANDOM', delays=[2,4,6],weight_transfer=False,
+                  filename='images/risk_cascades.png'):
         
         risk = nice_cascade_plot_comparison_setting_defaults(graph,node_id,repetitions,iterations,
-                                                      mu,beta,delays,
-                                                      n=graph.num_nodes(),filename=filename)
+                                                      mu,beta,delays,policy=policy,
+                                                      n=graph.number_of_nodes(),filename=filename)
         
-        return risk     
+        return risk  
+    
+    
+def most_probable(probabilities,max_size):
+    add = 0
+    for i in range(max_size):
+        add+= i*probabilities[i]
+    return add
