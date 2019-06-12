@@ -19,11 +19,22 @@ for delay in delays:
 
 print('Yeah!')
 '''
-
+'''
 from cascades import nice_cascade_plot_comparison
 
 nice_cascade_plot_comparison(repetitions=25,
-                             beta=0.4,
-                             delays=[2, 3, 4],
+                             beta=0.5,
+                             delays=[2, 3, 4, 5],
+                             colors = ['r','b','g','k'],
                              policy='SOFT',
-                             filename='images/nice_cascade_comparison_SOFT_ratio2.png')
+                             filename='images/cascades/beta_0.5/comparison_SOFT.png')
+
+'''
+
+from cascades import plot_cascade_sizes,cascades_sizes_multiple
+import pickle
+
+g = pickle.load(open('graphs/new.pickle', 'rb'))
+
+sizes = cascades_sizes_multiple(g,delays=[2,4])
+plot_cascade_sizes(sizes,delays=[2,4])

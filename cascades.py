@@ -45,11 +45,12 @@ def check_cascade_size_recursive(graph: DiGraph):
     return sizes
 
 
-def full_check_cascade_size_recursive(repetitions=25, mu=0.2, beta=0.6, delay=2, weight_transfer=False,
+def full_check_cascade_size_recursive(graph:DiGraph,repetitions=25,max_iterations=100,
+                                      mu=0.2, beta=0.6, delay=2, weight_transfer=False,
                                       show=True, policy='RANDOM'):
     sizes = []
     for i in range(repetitions):
-        g = pickle.load(open('graphs/new.pickle', 'rb'))
+        g = graph.copy()
 
         if policy == 'RANDOM':
             sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
@@ -61,7 +62,7 @@ def full_check_cascade_size_recursive(repetitions=25, mu=0.2, beta=0.6, delay=2,
             print('Policy not understood')
             return 0
 
-        sn.run(100)
+        sn.run(max_iterations)
         if show:
             sn.plot()
         sizes.append(check_cascade_size_recursive(sn.graph))
@@ -140,7 +141,7 @@ def cascade_size_plot(sizes, n, filename='images/cascade_size.png',
     plt.show()
 
 
-def nice_cascade_plot_comparison(repetitions=25, mu=0.2, beta=0.6, delays=[2, 4, 6], n=1000,
+def nice_cascade_plot_comparison(graph:DiGraph,repetitions=25, mu=0.2, beta=0.6, delays=[2, 4, 6], n=1000,
                                  colors=['r', 'b', 'g'], policy='RANDOM',
                                  filename='images/nice_cascade_plot_comparison.png'):
     plt.figure()
@@ -150,7 +151,7 @@ def nice_cascade_plot_comparison(repetitions=25, mu=0.2, beta=0.6, delays=[2, 4,
     plt.yscale('log')
     k = 0
     for delay in delays:
-        sizes = full_check_cascade_size_recursive(repetitions=repetitions, mu=mu, beta=beta,
+        sizes = full_check_cascade_size_recursive(graph,repetitions=repetitions, mu=mu, beta=beta,
                                                   policy=policy, delay=delay, show=False)
         size = lists_to_list(sizes)
         max_size = max(size)
@@ -231,3 +232,52 @@ def most_probable(probabilities, max_size):
     for i in range(max_size):
         add += i * probabilities[i]
     return add
+
+def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100, 
+                            mu=0.2, beta=0.6,
+                            policy='RANDOM', delays=[2, 4, 6], weight_transfer=False,
+                            filename='images/risk_cascades.png'):
+    total_sizes = []
+    for delay in delays:
+        sizes = full_check_cascade_size_recursive(graph, repetitions=repetitions,
+                                                        iterations=max_iterations, mu=mu,
+                                                        beta=beta, policy=policy,
+                                                        delay=delay, show=False)
+        size = lists_to_list(sizes)
+        total_sizes.append(size)
+        
+    return total_sizes
+
+def plot_cascade_sizes(sizes:list,delays=[2,4,6],colors = ['r','g','b'],
+                       filename='images/cascades/comparison_plot.png'):
+    
+    plt.figure()
+    plt.xlabel('Cascade size (Cs)')
+    plt.ylabel('1-P(cs<Cs)')
+    plt.xscale('log')
+    plt.yscale('log')
+    k = 0
+    max_prob = []
+    for size in sizes:
+        max_size = max(size)
+        np.sqrt(np.sum(size))
+        prob = []
+        for i in range(max_size + 1):
+            p = 0
+            for j in range(len(size)):
+                if i == size[j]:
+                    p += 1
+            p = p / len(size)
+            prob.append(p)
+        # now we have a list of probabilities and we need to do cumulative distribution
+        inv_cum = 1 - np.cumsum(prob)
+        max_prob.append([delays[k], most_probable(prob, max_size)])
+        lab = 'delay ' + str(delays[k])
+        plt.plot(np.arange(0, max_size + 1), inv_cum, color=colors[k], label=lab)
+        k += 1
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.show()
+    return max_prob
+        
