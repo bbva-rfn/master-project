@@ -6,6 +6,7 @@ import pickle
 from SecNet import SecNet, ReconnectionPolicy
 import matplotlib.pyplot as plt
 import numpy as np
+from risk_functions import set_initial_defaults
 
 #as we store at which iteration they become infected it is trivial
 def cascade_origins(graph: DiGraph):
@@ -43,11 +44,21 @@ def check_cascade_size_recursive(graph: DiGraph):
 
 
 def full_check_cascade_size_recursive(repetitions=25,mu=0.2,beta=0.6,delay=2,weight_transfer=False,
-                                      show=True):
+                                      show=True,policy='RANDOM'):
     sizes = []
     for i in range(repetitions):
         g = pickle.load(open('graphs/new.pickle', 'rb'))
-        sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM, default_delay=delay, weight_transfer=weight_transfer)
+        
+        if policy == 'RANDOM':
+            sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                        default_delay=delay, weight_transfer=weight_transfer)
+        elif policy == 'SOFT':
+             sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
+                        default_delay=delay, weight_transfer=weight_transfer)
+        else:
+            print('Policy not understood')
+            return 0
+        
         sn.run(100)
         if show:
             sn.plot()
@@ -55,7 +66,32 @@ def full_check_cascade_size_recursive(repetitions=25,mu=0.2,beta=0.6,delay=2,wei
     
     return sizes
         
-
+#modification for a general graph with option to change initial defaulted nodes
+def full_check_cascade_size_seting_default(graph:DiGraph,node_id,repetitions=25,mu=0.2,beta=0.6,
+                                           delay=2,weight_transfer=False,iterations=100,
+                                           show=True,policy='RANDOM'):
+    sizes = []
+    for i in range(repetitions):
+        
+        set_initial_defaults(graph,node_id)
+        
+        if policy == 'RANDOM':
+            sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                        default_delay=delay, weight_transfer=weight_transfer)
+        elif policy == 'SOFT':
+             sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
+                        default_delay=delay, weight_transfer=weight_transfer)
+        else:
+            print('Policy not understood')
+            return 0
+        
+        sn.run(iterations)
+        if show:
+            sn.plot()
+        sizes.append(check_cascade_size_recursive(sn.graph))
+    
+    return sizes
+    
 #Modification and better implementation of ploting cascade sizes
     
 def lists_to_list(l):
@@ -130,5 +166,45 @@ def nice_cascade_plot_comparison(repetitions=25,mu=0.2,beta=0.6,delays=[2,4,6],n
     plt.savefig(filename)
     plt.show()
     
+    
+def nice_cascade_plot_comparison_setting_defaults(graph:DiGraph, node_id,repetitions=25,
+                                                  max_iterations = 100,mu=0.2,beta=0.6,
+                                                  delays=[2,4,6],n=1000,
+                                                  colors=['r','b','g'],policy='RANDOM',
+                                                  filename='images/nice_cascade_plot_comparison.png'):
+    maxx=0
+    plt.figure()
+    plt.xlabel('cs')
+    plt.ylabel('1-P(cs<Cs)')
+    plt.xscale('log')
+    plt.yscale('log')
+    k = 0
+    for delay in delays:
+        sizes = full_check_cascade_size_seting_default(graph,node_id,repetitions=repetitions,
+                                                       iterations= max_iterations,mu=mu,beta=beta,
+                                                       policy=policy,
+                                                       delay = delay ,show=False)
+        size = lists_to_list(sizes)
+        max_size = max(size)
+        if max_size > maxx:
+            maxx = max_size+0.
+        prob = []
+        for i in range(max_size + 1):
+            p = 0
+            for j in range(len(size)):
+                if (i == size[j]):
+                    p += 1
+            p = p / n
+            prob.append(p)
+        # now we have a list of probabilities and we need to do cumulative distribution
+        inv_cum = 1 - np.cumsum(prob)
+    
+        lab = 'delay '+str(delay)
+        plt.plot(np.arange(0, max_size + 1), inv_cum,color=colors[k],label=lab)
+        k+=1
+    plt.legend()
+    plt.savefig(filename)
+    plt.show()
+    return maxx
     
         

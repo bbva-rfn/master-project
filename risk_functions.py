@@ -3,6 +3,7 @@
 from networkx import DiGraph
 from SecNet import SecNet, ReconnectionPolicy
 import numpy as np
+from cascades import nice_cascade_plot_comparison_setting_defaults
 
 def set_initial_defaults(graph:DiGraph,node_id):
     for node_i in graph:
@@ -102,7 +103,16 @@ def risk_for_me_some(graph:DiGraph,node_id_me,node_id_others:list,repetitions=20
         risks.append(risk)
     return np.mean(risks)
 
-def risk_overall(graph:DiGraph,repetitions=10,iterations=75,mu=0.2,beta=0.6,delay=2,weight_transfer=False):
+def risk_cascades(graph:DiGraph,node_id,repetitions=25,iterations=100,mu=0.2,beta=0.6,
+                  delays=[2,4,6],weight_transfer=False,filename='images/risk_cascades.png'):
+        
+        risk = nice_cascade_plot_comparison_setting_defaults(graph,node_id,repetitions,iterations,
+                                                      mu,beta,delays,
+                                                      n=graph.num_nodes(),filename=filename)
+        
+        return risk
+def risk_overall(graph:DiGraph,repetitions=10,iterations=75,mu=0.2,beta=0.6,delay=2,
+                 weight_transfer=False):
     #we need an atribute that is risk_overall 
     for node_id in graph:
         node = graph.nodes[node_id]
