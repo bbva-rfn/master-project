@@ -254,7 +254,7 @@ class SecNet:
         std_defaulted_densities = np.std(defaulted_densities)
 
         # Check if the defaulted densities tend to 0
-        if mean_defaulted_densities < 10e-3 or std_defaulted_densities < 10e-4:
+        if mean_defaulted_densities < 10e-3 and std_defaulted_densities < 10e-4:
             return True
 
         var_coeff = std_defaulted_densities / mean_defaulted_densities

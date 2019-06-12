@@ -114,7 +114,7 @@ def density_plot(g:DiGraph,
                   iterations = 200,
                   file_plot= 'images/density/density_by_policy'):
     
-        for policy in ['SOFT','RANDOM','NONE']:
+        for policy in ['SOFT','RANDOM']:
             for default_delay in [2,4,6,8]:
                 if policy == 'NONE':
                     sn = SecNet(g, mu = mu, beta =beta, 
@@ -133,7 +133,7 @@ def density_plot(g:DiGraph,
                                 reconnection_policy = ReconnectionPolicy.STRONG, 
                                 default_delay = default_delay , weight_transfer = False)
                 file  =  file_plot + policy + str(default_delay)+'.png'
-                sn.run(iterations)    
+                sn.run(iterations, variation_coeff = 10e-5)    
                 sn.plot('Defaulted companies for %s' %policy,
                         save = True ,
                         file_name =  file)
