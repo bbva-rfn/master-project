@@ -345,20 +345,21 @@ def risk_cascades_sectorial(graph: DiGraph, num_sectors, repetitions_per_node=15
     
     
     for sector in range(num_sectors):
-        risk = []
-        maximum = []
+        risk = np.zeros((amount_per_sector,len(delays)))
+        maximum = np.zeros((amount_per_sector,len(delays)))
         eligible_nodes = sn.nodes_per_sector[sector]
         nodes = np.random.choice(eligible_nodes,size=amount_per_sector)
+        r = 0
         for node_id in nodes:
+            
             sizes = cascades_setting_defaults(graph, node_id, repetitions_per_node, max_iterations,
                                                  mu, beta, delays, policy=policy)
                                                          
-            aux_risk,aux_maximum = assessment(sizes,delays) 
-            risk.append(aux_risk)
-            maximum.append(aux_maximum)
+            risk[r],maximum[r] = assessment(sizes,delays) 
             
+            r+=1
         for i in range(len(delays)):
-            risks[len(delays)*sector+i] = np.mean(risk[:][i])
-            maximums[len(delays)*sector+i] = np.mean(maximum[:][i])
+            risks[len(delays)*sector+i] = np.mean(risk[:,i])
+            maximums[len(delays)*sector+i] = np.max(maximum[:,i])
             
     return risks,maximums

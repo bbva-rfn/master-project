@@ -39,6 +39,9 @@ Also take into consideration:
 Note that if there are 15 sectors, 10 nodes per sector considerer for the analysis
 and 10 repetitions per node with two different delays this results in 3000 simulations !!!!!!!!
 
+Since only one node is getting infected in many cases the system becomes totally cured
+and it stops, that helps the computational time 
+
 I did it for 3 sectors 5 repetitions per node and 10 nodes per sector with delays 2,4 to check
 so 300 simulations and it worked in pretty decent time in my computer (less than 10 min). 
 However a lot of simulations they may be. 
@@ -51,10 +54,10 @@ maxim_prob,maximums = risk_cascades_sectorial(g,num_sectors = number_of_sectors,
                                          beta=0.4,delays=delays_risk,amount_per_sector=10)
 
 for i in range(number_of_sectors):
-    print('For sector',i,'we have:')
+    print('\nFor sector',i,'we have:')
     j = 0
     for delay in delays_risk:
-        print('\nDelay',delay,'\n Maximum probable size of cascade',
+        print('Delay',delay,'\n Maximum probable size of cascade',
               maxim_prob[i*len(delays_risk)+j],'\n Maximum size of the cascade',
               maximums[i*len(delays_risk)+j])
         j +=1
