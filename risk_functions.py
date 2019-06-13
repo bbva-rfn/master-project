@@ -103,16 +103,5 @@ def risk_for_me_some(graph:DiGraph,node_id_me,node_id_others:list,repetitions=20
     return np.mean(risks)
 
 
-def risk_overall(graph:DiGraph,repetitions=10,iterations=75,mu=0.2,beta=0.6,delay=2,
-                 weight_transfer=False):
-    #we need an atribute that is risk_overall 
-    for node_id in graph:
-        node = graph.nodes[node_id]
-        set_initial_defaults(graph,node['id'])
-        sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM, default_delay=delay, weight_transfer=weight_transfer)
-        sn.run(iterations)
-    return 'Done'
-        
-    
     
         

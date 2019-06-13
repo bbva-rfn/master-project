@@ -74,29 +74,35 @@ def run_simulation(graph, mu, beta, policy, delay, weight_transfer, max_iteratio
 
 # modification for a general graph with option to change initial defaulted nodes
 def full_check_cascade_size_setting_default(graph: DiGraph, node_id, repetitions=25, mu=0.2, beta=0.6,
-                                            delay=2, weight_transfer=False, iterations=100,
-                                            show=True, policy='RANDOM'):
-    sizes = []
-    for i in range(repetitions):
-
-        set_initial_defaults(graph, node_id)
-
-        if policy == 'RANDOM':
-            sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
-                        default_delay=delay, weight_transfer=weight_transfer)
-        elif policy == 'SOFT':
-            sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
-                        default_delay=delay, weight_transfer=weight_transfer)
-        else:
-            print('Policy not understood')
-            return 0
-
-        sn.run(iterations)
-        if show:
-            sn.plot()
-        sizes.append(check_cascade_size_recursive(sn.graph))
-
+                                            delay=2, weight_transfer=False, max_iterations=100,
+                                            show=False, policy='RANDOM'):
+    
+    sizes = Parallel(n_jobs=-1)(delayed(run_simulation_set)(graph,node_id, mu, beta, policy,delay, weight_transfer, max_iterations, show) for _ in range(repetitions))
     return sizes
+
+
+def run_simulation_set(graph,node_id, mu, beta, policy,
+                     delay, weight_transfer, max_iterations, show):
+
+    set_initial_defaults(graph, node_id)
+    
+    if policy == 'RANDOM':
+        sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                    default_delay=delay, weight_transfer=weight_transfer)
+    elif policy == 'SOFT':
+        sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
+                    default_delay=delay, weight_transfer=weight_transfer)
+    else:
+        print('Policy not understood')
+        return 0
+
+    sn.run(max_iterations,variation_coeff = 10e-5)
+    if show:
+        sn.plot()
+        
+    return check_cascade_size_recursive(sn.graph)
+
+
 
 
 # Modification and better implementation of plotting cascade sizes
@@ -231,7 +237,7 @@ def risk_cascades(graph: DiGraph, node_id, repetitions=25, iterations=100, mu=0.
 
 def most_probable(probabilities, max_size):
     add = 0
-    for i in range(max_size):
+    for i in range(max_size+1):
         add += i * probabilities[i]
     return add
 
@@ -287,3 +293,72 @@ def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
     plt.show()
     return max_prob
 
+def cascades_setting_defaults(graph, node_id, repetitions, max_iterations,
+                              mu, beta, delays, policy):
+    
+    total_sizes = []
+    for delay in delays:
+        sizes = full_check_cascade_size_setting_default(graph,node_id, repetitions=repetitions,
+                                                  max_iterations=max_iterations, mu=mu,
+                                                  beta=beta, policy=policy,
+                                                  delay=delay, show=False)
+        size = lists_to_list(sizes)
+        total_sizes.append(size)
+
+    return total_sizes
+
+def assessment(sizes,delays):
+    max_prob = np.zeros(len(delays))
+    max_sizes = np.zeros(len(delays))
+    k = 0
+    for delay in delays:
+        size = sizes[k]
+        max_size = max(size)
+        
+        if max_size> max_sizes[k]:
+            max_sizes[k]=max_size
+            
+        prob = []
+        for i in range(max_size + 1):
+            p = 0
+            for j in range(len(size)):
+                if i == size[j]:
+                    p += 1
+            p = p / len(size)
+            prob.append(p)
+        
+        max_prob[k] = most_probable(prob, max_size)
+        k += 1
+        
+    return max_prob,max_sizes
+
+
+def risk_cascades_sectorial(graph: DiGraph, num_sectors, repetitions_per_node=15,
+                            max_iterations=150, mu=0.2, beta=0.6, amount_per_sector=10,
+                            policy='RANDOM', delays=[2, 4, 6]):
+    
+    risks = np.zeros(num_sectors*len(delays))
+    maximums = np.zeros(num_sectors*len(delays))
+    #doesnt matter what to pu tis just to apply the nodes by sector function
+    sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                    default_delay=2, weight_transfer=False)
+    
+    
+    for sector in range(num_sectors):
+        risk = []
+        maximum = []
+        eligible_nodes = sn.nodes_per_sector[sector]
+        nodes = np.random.choice(eligible_nodes,size=amount_per_sector)
+        for node_id in nodes:
+            sizes = cascades_setting_defaults(graph, node_id, repetitions_per_node, max_iterations,
+                                                 mu, beta, delays, policy=policy)
+                                                         
+            aux_risk,aux_maximum = assessment(sizes,delays) 
+            risk.append(aux_risk)
+            maximum.append(aux_maximum)
+            
+        for i in range(len(delays)):
+            risks[len(delays)*sector+i] = np.mean(risk[:][i])
+            maximums[len(delays)*sector+i] = np.mean(maximum[:][i])
+            
+    return risks,maximums
