@@ -47,7 +47,7 @@ def check_cascade_size_recursive(graph: DiGraph):
 
 def full_check_cascade_size_recursive(graph: DiGraph, repetitions=25, max_iterations=100,
                                       mu=0.2, beta=0.6, delay=2, weight_transfer=False,
-                                      show=True, policy='RANDOM'):
+                                      show=False, policy='RANDOM'):
     sizes = Parallel(n_jobs=-1)(delayed(run_simulation)(graph, mu, beta, policy, delay, weight_transfer, max_iterations, show) for _ in range(repetitions))
     return sizes
 
@@ -65,7 +65,7 @@ def run_simulation(graph, mu, beta, policy, delay, weight_transfer, max_iteratio
         print('Policy not understood')
         return 0
 
-    sn.run(max_iterations)
+    sn.run(max_iterations,variation_coeff = 10e-5)
     if show:
         sn.plot()
 
@@ -143,7 +143,7 @@ def cascade_size_plot(sizes, n, filename='images/cascade_size.png',
     plt.show()
 
 
-def nice_cascade_plot_comparison(graph: DiGraph, repetitions=25, mu=0.2, beta=0.6, delays=[2, 4, 6], n=1000,
+def nice_cascade_plot_comparison(graph: DiGraph, repetitions=25, mu=0.2, beta=0.6, delays=[2, 4, 6], 
                                  colors=['r', 'b', 'g'], policy='RANDOM',
                                  filename='images/nice_cascade_plot_comparison.png'):
     plt.figure()
@@ -163,7 +163,7 @@ def nice_cascade_plot_comparison(graph: DiGraph, repetitions=25, mu=0.2, beta=0.
             for j in range(len(size)):
                 if i == size[j]:
                     p += 1
-            p = p / n
+            p = p / len(size)
             prob.append(p)
         # now we have a list of probabilities and we need to do cumulative distribution
         inv_cum = 1 - np.cumsum(prob)
@@ -180,7 +180,7 @@ def nice_cascade_plot_comparison(graph: DiGraph, repetitions=25, mu=0.2, beta=0.
 
 def nice_cascade_plot_comparison_setting_defaults(graph: DiGraph, node_id, repetitions=25,
                                                   max_iterations=100, mu=0.2, beta=0.6,
-                                                  delays=[2, 4, 6], n=1000,
+                                                  delays=[2, 4, 6], 
                                                   colors=['r', 'b', 'g'], policy='RANDOM',
                                                   filename='images/nice_cascade_plot_change_default.png'):
     max_prob = []
@@ -204,7 +204,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph: DiGraph, node_id, repet
             for j in range(len(size)):
                 if i == size[j]:
                     p += 1
-            p = p / n
+            p = p / len(size)
             prob.append(p)
         # now we have a list of probabilities and we need to do cumulative distribution
         inv_cum = 1 - np.cumsum(prob)
@@ -253,12 +253,15 @@ def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
 
 
 def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
-                       filename='images/cascades/comparison_plot.png'):
+                       ylim = None ,filename='images/cascades/comparison_plot.png'):
     plt.figure()
     plt.xlabel('Cascade size (Cs)')
     plt.ylabel('1-P(cs<Cs)')
     plt.xscale('log')
     plt.yscale('log')
+    if ylim != None:
+        plt.ylim(ylim)
+        
     k = 0
     max_prob = []
     for size in sizes:
@@ -283,3 +286,4 @@ def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
     plt.savefig(filename)
     plt.show()
     return max_prob
+

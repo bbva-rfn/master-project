@@ -37,6 +37,6 @@ import pickle
 
 g = pickle.load(open('graphs/new.pickle', 'rb'))
 
-sizes = cascades_sizes_multiple(g,delays=[2,3,4,5])
-plot_cascade_sizes(sizes,delays=[2,3,4,5],colors=['r','g','b','k'],
-                   filename='images/cascades/beta_0.5/comparison_RANDOM.png')
+sizes = cascades_sizes_multiple(g,beta=0.4,delays=[2,3,4,5],policy='RANDOM',repetitions=30)
+plot_cascade_sizes(sizes,delays=[2,3,4,5],ylim = 10e-4,colors=['r','g','b','k'],
+                   filename='images/cascades/beta_0.4/comparison_RANDOM.png')
