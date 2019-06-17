@@ -143,7 +143,7 @@ def sectorial_multi_beta(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetitions = 
                               max_iterations = 150, filename=  'results/density/prob_by_sector',
                               policy = 'SOFT', default_delay = 4,num_sectors = 17):  
     
-    betas = np.arange(0, 1, 0.02)
+    betas = np.arange(0, 1, beta_lapse)
     if policy == 'NONE':
             recon_policy = ReconnectionPolicy.NONE
                        
@@ -224,10 +224,10 @@ def plot_sectorial_multi_beta(probs_by_sector,names,betas,
         
 
 def sectorial_multi_beta_paral(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetitions = 5,
-                              max_iterations = 150, filename=  'results/density/prob_by_sector',
+                              max_iterations = 150, filename=  'results/density/paral_prob_by_sector',
                               policy = 'SOFT', default_delay = 4,num_sectors = 17):  
     
-    betas = np.arange(0, 1, 0.02)
+    betas = np.arange(0, 1, beta_lapse)
     if policy == 'NONE':
             recon_policy = ReconnectionPolicy.NONE
                        
@@ -246,7 +246,7 @@ def sectorial_multi_beta_paral(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetiti
     
     density_probs = []
     
-    prob_by_sector = Parallel(n_jobs=-1)(delayed(run_beta)(graph,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
+    prob_by_sector = Parallel(n_jobs=-1)(delayed(run_beta)(g,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
     density_probs.append(prob_by_sector)
     
     probs_by_sector = construct_probs_by_sector(density_probs)
