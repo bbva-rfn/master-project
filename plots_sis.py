@@ -195,7 +195,7 @@ def sectorial_multi_beta(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetitions = 
         #print(density_probs)
     probs_by_sector = construct_probs_by_sector(density_probs)
     #print(probs_by_sector)
-    filename = filename + policy + str(default_delay)
+    filename = filename + policy + str(default_delay)+ '.pickle'
     
     pickle.dump(probs_by_sector, open(filename, 'wb'))
     
@@ -209,7 +209,8 @@ def plot_sectorial_multi_beta(probs_by_sector,names,betas,
     for prob in probs_by_sector:
         lab = names[str(z)]
         plt.plot(betas, prob,label=lab)
-        plt.legend(loc='upper left')   
+        plt.legend(loc='upper left')
+        z+=1
     plt.title(title)
     plt.legend(loc='upper left')    
     plt.xlabel('Betas')
@@ -246,12 +247,12 @@ def sectorial_multi_beta_paral(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetiti
     
     density_probs = []
     
-    prob_by_sector = Parallel(n_jobs=-1)(delayed(run_beta)(g,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
-    density_probs.append(prob_by_sector)
+    density_probs = Parallel(n_jobs=-1)(delayed(run_beta)(g,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
+    #density_probs.append(prob_by_sector)
     
     probs_by_sector = construct_probs_by_sector(density_probs)
     #print(probs_by_sector)
-    filename = filename + policy + str(default_delay)
+    filename = filename + policy + str(default_delay)+ '.pickle'
     
     pickle.dump(probs_by_sector, open(filename, 'wb'))
     
