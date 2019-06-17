@@ -225,7 +225,7 @@ def plot_sectorial_multi_beta(probs_by_sector,names,betas,
         
 
 def sectorial_multi_beta_paral(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetitions = 5,
-                              max_iterations = 150, filename=  'results/density/paral_prob_by_sector',
+                              max_iterations = 150, filename='results/density/paral_prob_by_sector',
                               policy = 'SOFT', default_delay = 4,num_sectors = 17):  
     
     betas = np.arange(0, 1, beta_lapse)

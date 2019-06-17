@@ -9,15 +9,19 @@ start = time.time()
 
 g = pickle.load(open('graphs/new.pickle', 'rb'))
 
-
+'''
 def run():
     sn = SecNet(g, mu=0.2, beta=0.6, reconnection_policy=ReconnectionPolicy.SOFT)
     sn.run(30, verbose=False)
-
+    
 
 Parallel(n_jobs=-1, verbose=1)(delayed(run,)() for _ in range(4))
 
 end = time.time()
 print(end - start)
-# sn.plot()
+'''
+sn = SecNet(g, mu=0.1, beta=0.9,reconnection_policy=ReconnectionPolicy.SOFT,default_delay=2)
+sn.run(70)
+    
+sn.plot()
 # pickle.dump(sn, open('results/sto_random_weights.pickle', 'wb'))
