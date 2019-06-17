@@ -24,11 +24,11 @@ density_plot(g,
 ## niterations to see how consistent it is and the percentage of 0 and equilibirums:
 
 
-density =  replicate_density(niter = 2,
+density =  replicate_density(niter = 100,
                              beta = 0.4, 
-                             default_delay =  2,
-                             policy = ReconnectionPolicy.SOFT)
-
+                             default_delay =  4,
+                             policy = ReconnectionPolicy.SOFT,
+                             file_plot  = 'images/Replicate_density/beta_0.4/')
 pct = pct_density(density,
                   niter = 2)
 

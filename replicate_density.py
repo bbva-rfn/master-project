@@ -11,12 +11,12 @@ g = pickle.load(open('graphs/new.pickle', 'rb'))
 def replicate_density(niter = 100, 
                       beta = 0.6,
                       default_delay = 2,
-                      policy = ReconnectionPolicy.SOFT):
+                      policy = ReconnectionPolicy.SOFT,
+                      file_plot  = 'images/Replicate_density/beta_0.4' ):
     dens = []
     densities = []
     fig = figure()
     plot = fig.add_subplot(111)
-    file  = 'images/Replicate_density/beta_0.4/replicate_density.png' 
     for i in range(niter):
         sn = SecNet(g, mu = 0.2, 
                     beta = beta, 
@@ -27,17 +27,16 @@ def replicate_density(niter = 100,
         plot.plot(sn.defaulted_density)
         dens.append(sn.defaulted_density[- 1])
         sn.defaulted_density
-        fig.suptitle('%s' %niter + '\t number of densities simulations with policiy %s' %policy + 
-         '\t and for beta %s' %beta )
+        fig.suptitle(' Simulations function with n = %s'%niter )
+        plt.xlabel('Iteratuinons')
+        plt.ylabel('Density ')
+    file  =  file_plot + str(policy) + str(beta)+ str(default_delay)+'.png'
     fig.savefig(file)
     show()
         
     return (dens)
 
-density =  replicate_density(niter = 2,
-                             beta = 0.4, 
-                             default_delay =  2,
-                             policy = ReconnectionPolicy.SOFT)
+
 
 def pct_density(dens,
                 niter = 2):
@@ -47,6 +46,3 @@ def pct_density(dens,
             count = count + 1       
     percnt = (count/niter)
     return (percnt)
-
-pct = pct_density(density, niter = 2)
-print(pct)
