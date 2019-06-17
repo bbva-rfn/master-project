@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from SecNet import SecNet, ReconnectionPolicy
 from networkx import DiGraph
-
+from joblib import Parallel, delayed
 
 # Load in graph + parameters
 def construct_probs_by_sector(density_probs):
@@ -138,40 +138,152 @@ def density_plot(g:DiGraph,
                         save = True ,
                         file_name =  file)
                 
-                        
-'''                    
-def sectorial_density_plot(g:DiGraph,mu=0.2,beta=0.6,max_iterations=200,policy = 'RANDOM',
-                           delay = 2, number_sectors = 5,title = 'Title',save = True,
-                           filename='images/density/sectorial_density.png'):
+     
+def sectorial_multi_beta(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetitions = 5,
+                              max_iterations = 150, filename=  'results/density/prob_by_sector',
+                              policy = 'SOFT', default_delay = 4,num_sectors = 17):  
+    
+    betas = np.arange(0, 1, 0.02)
     if policy == 'NONE':
-        sn = SecNet(g, mu = mu, beta =beta, 
-                    reconnection_policy = ReconnectionPolicy.NONE, 
-                    default_delay= 0 , weight_transfer = False)
+            recon_policy = ReconnectionPolicy.NONE
+                       
     elif policy == 'RANDOM':
-        sn = SecNet(g, mu = mu, beta = beta, 
-                    reconnection_policy = ReconnectionPolicy.RANDOM, 
-                    default_delay = delay  , weight_transfer = False)
+        recon_policy = ReconnectionPolicy.RANDOM 
+                    
     elif policy == 'SOFT':
-        sn = SecNet(g, mu = mu, beta = beta, 
-                    reconnection_policy = ReconnectionPolicy.SOFT, 
-                    default_delay = delay  , weight_transfer = False)
-    else:
-        print('Error in policy selection')
+        recon_policy = ReconnectionPolicy.SOFT
+                   
+    elif policy == 'STRONG':
+        recon_policy = ReconnectionPolicy.STRONG
+        
+    else:  
+        print('policy not found.')
         return 0
     
-    sn.run(max_iterations,variation_coeff=10e-5)
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    for sector in range(number_sectors):
-        lab = 'Sector' + str(sector)
-        ax.plot(self.defaulted_density,label = lab)
+    density_probs = []
+    
+    for beta in betas:
         
-    ax.set_xlabel('Iterations')
-    ax.set_ylabel('Density')
-    ax.set_title(title)
-    fig.tight_layout()
+        prob_by_sector_total = np.zeros(num_sectors)
+        prob_by_sector = np.zeros((num_sectors,repetitions))
+        
+        for i in range(repetitions):
+            sn = SecNet(g, mu, beta, 
+                        reconnection_policy = recon_policy, 
+                        default_delay = default_delay, weight_transfer = False)
+            
+            sn.run(max_iter=max_iterations,variation_coeff=10e-5)
+            
+            
+
+            for sector in range(num_sectors):
+                nodes = sn.nodes_per_sector[sector]
+                n = len(nodes)
+                for node_id in nodes:
+                    node = sn.graph.nodes[node_id]
+                    prob_by_sector[sector,i] += node['defaulted']
+                    
+                prob_by_sector[sector,i] = prob_by_sector[sector,i] / n
+            
+        
+            
+        for j in range(num_sectors):         
+            prob_by_sector_total[j] = np.mean(prob_by_sector[j,:])
+
+        density_probs.append(prob_by_sector_total)
+        
+        #print(density_probs)
+    probs_by_sector = construct_probs_by_sector(density_probs)
+    #print(probs_by_sector)
+    filename = filename + policy + str(default_delay)
+    
+    pickle.dump(probs_by_sector, open(filename, 'wb'))
+    
+    return probs_by_sector
+
+def plot_sectorial_multi_beta(probs_by_sector,names,betas,
+                              title = 'BBVA sample with Soft reconnection policy & no delay',
+                              filename = 'images/density/Soft_0.png',save=True):
+    plt.figure()
+    z = 0
+    for prob in probs_by_sector:
+        lab = names[str(z)]
+        plt.plot(betas, prob,label=lab)
+        plt.legend(loc='upper left')   
+    plt.title(title)
+    plt.legend(loc='upper left')    
+    plt.xlabel('Betas')
+    plt.ylabel('Density prob')
+    
     if save:
-        fig.savefig(filename)
+        plt.savefig(filename)
+        
     plt.show()
-'''
+        
+ 
+        
+
+def sectorial_multi_beta_paral(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetitions = 5,
+                              max_iterations = 150, filename=  'results/density/prob_by_sector',
+                              policy = 'SOFT', default_delay = 4,num_sectors = 17):  
+    
+    betas = np.arange(0, 1, 0.02)
+    if policy == 'NONE':
+            recon_policy = ReconnectionPolicy.NONE
+                       
+    elif policy == 'RANDOM':
+        recon_policy = ReconnectionPolicy.RANDOM 
+                    
+    elif policy == 'SOFT':
+        recon_policy = ReconnectionPolicy.SOFT
+                   
+    elif policy == 'STRONG':
+        recon_policy = ReconnectionPolicy.STRONG
+        
+    else:  
+        print('policy not found.')
+        return 0
+    
+    density_probs = []
+    
+    prob_by_sector = Parallel(n_jobs=-1)(delayed(run_beta)(graph,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
+    density_probs.append(prob_by_sector)
+    
+    probs_by_sector = construct_probs_by_sector(density_probs)
+    #print(probs_by_sector)
+    filename = filename + policy + str(default_delay)
+    
+    pickle.dump(probs_by_sector, open(filename, 'wb'))
+    
+    return probs_by_sector
+      
+def run_beta(graph,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions):  
+    
+    prob_by_sector_total = np.zeros(num_sectors)
+    prob_by_sector = np.zeros((num_sectors,repetitions))
+    
+    for i in range(repetitions):
+        sn = SecNet(graph, mu, beta, 
+                    reconnection_policy = recon_policy, 
+                    default_delay = default_delay, weight_transfer = False)
+        
+        sn.run(max_iter=max_iterations,variation_coeff=10e-5)
+        
+        
+
+        for sector in range(num_sectors):
+            nodes = sn.nodes_per_sector[sector]
+            n = len(nodes)
+            for node_id in nodes:
+                node = sn.graph.nodes[node_id]
+                prob_by_sector[sector,i] += node['defaulted']
+                
+            prob_by_sector[sector,i] = prob_by_sector[sector,i] / n
+        
+    
+        
+    for j in range(num_sectors):         
+        prob_by_sector_total[j] = np.mean(prob_by_sector[j,:])
+
+    return prob_by_sector_total
     
