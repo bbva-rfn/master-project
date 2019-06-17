@@ -344,7 +344,9 @@ def risk_cascades_sectorial(graph: DiGraph, num_sectors, repetitions_per_node=15
                     default_delay=2, weight_transfer=False)
     
     
+    
     for sector in range(num_sectors):
+        
         risk = np.zeros((amount_per_sector,len(delays)))
         maximum = np.zeros((amount_per_sector,len(delays)))
         eligible_nodes = sn.nodes_per_sector[sector]
@@ -357,9 +359,77 @@ def risk_cascades_sectorial(graph: DiGraph, num_sectors, repetitions_per_node=15
                                                          
             risk[r],maximum[r] = assessment(sizes,delays) 
             
+            
             r+=1
         for i in range(len(delays)):
             risks[len(delays)*sector+i] = np.mean(risk[:,i])
             maximums[len(delays)*sector+i] = np.max(maximum[:,i])
             
+        
+            
     return risks,maximums
+
+def sectorial_cascades_sizes(graph: DiGraph, num_sectors, repetitions_per_node=15,
+                            max_iterations=150, mu=0.2, beta=0.6, nodes_per_sector=5,
+                            policy='RANDOM', delay=[2]):
+    
+    sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
+                    default_delay=2, weight_transfer=False)
+    
+    sector_sizes = []
+    
+    for sector in range(num_sectors):
+        sizes = []
+        eligible_nodes = sn.nodes_per_sector[sector]
+        nodes = np.random.choice(eligible_nodes,size=nodes_per_sector)
+        
+        for node_id in nodes:
+            size = cascades_setting_defaults(graph, node_id, repetitions_per_node, max_iterations,
+                                                 mu, beta, delay, policy=policy)
+            
+            [sizes.append(siz) for siz in size]
+            
+        sector_sizes.append(sizes)
+        
+    
+    return sector_sizes
+
+def plot_sectorial_cascades(sizes,ylim = None,title='Title',
+                            filename = 'images/cascades/sectorial_cascades.png'):
+    
+    plt.figure()
+    plt.xlabel('Cascade size (Cs)')
+    plt.ylabel('1-P(cs<Cs)')
+    plt.xscale('log')
+    plt.yscale('log')
+    
+    
+         
+    if ylim != None:
+        plt.ylim(ylim)
+        
+    k = 0
+    
+    for size in sizes:
+        max_size = max(size)
+        
+        prob = []
+        for i in range(max_size + 1):
+            p = 0
+            for j in range(len(size)):
+                if i == size[j]:
+                    p += 1
+            p = p / len(size)
+            prob.append(p)
+        # now we have a list of probabilities and we need to do cumulative distribution
+        inv_cum = 1 - np.cumsum(prob)
+        
+        lab = 'Sector ' + str(k)
+        plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
+        k += 1
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.show()
+            
+        

@@ -21,13 +21,13 @@ def construct_probs_by_sector(density_probs):
 
 
 def beta_plot(g: DiGraph, 
-              mu = 0.4, 
+              mu = 0.1, 
               iterations = 75, 
               file_plot=  'images/prob_by_sector',
               policy = 'SOFT',
               default_delay = 4):
 
-    betas = np.arange(0, 1, 0.1)
+    betas = np.arange(0, 1, 0.02)
 
     density_probs = []
 
@@ -139,4 +139,39 @@ def density_plot(g:DiGraph,
                         file_name =  file)
                 
                         
-                    
+'''                    
+def sectorial_density_plot(g:DiGraph,mu=0.2,beta=0.6,max_iterations=200,policy = 'RANDOM',
+                           delay = 2, number_sectors = 5,title = 'Title',save = True,
+                           filename='images/density/sectorial_density.png'):
+    if policy == 'NONE':
+        sn = SecNet(g, mu = mu, beta =beta, 
+                    reconnection_policy = ReconnectionPolicy.NONE, 
+                    default_delay= 0 , weight_transfer = False)
+    elif policy == 'RANDOM':
+        sn = SecNet(g, mu = mu, beta = beta, 
+                    reconnection_policy = ReconnectionPolicy.RANDOM, 
+                    default_delay = delay  , weight_transfer = False)
+    elif policy == 'SOFT':
+        sn = SecNet(g, mu = mu, beta = beta, 
+                    reconnection_policy = ReconnectionPolicy.SOFT, 
+                    default_delay = delay  , weight_transfer = False)
+    else:
+        print('Error in policy selection')
+        return 0
+    
+    sn.run(max_iterations,variation_coeff=10e-5)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    for sector in range(number_sectors):
+        lab = 'Sector' + str(sector)
+        ax.plot(self.defaulted_density,label = lab)
+        
+    ax.set_xlabel('Iterations')
+    ax.set_ylabel('Density')
+    ax.set_title(title)
+    fig.tight_layout()
+    if save:
+        fig.savefig(filename)
+    plt.show()
+'''
+    
