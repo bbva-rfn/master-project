@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from risk_functions import set_initial_defaults
 from joblib import Parallel, delayed
+import pickle
 
 
 # as we store at which iteration they become infected it is trivial
@@ -245,7 +246,7 @@ def most_probable(probabilities, max_size):
 def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
                             mu=0.2, beta=0.6,
                             policy='RANDOM', delays=[2, 4, 6], weight_transfer=False,
-                            filename='images/risk_cascades.png'):
+                            filename='results/cascades/'):
     total_sizes = []
     for delay in delays:
         sizes = full_check_cascade_size_recursive(graph, repetitions=repetitions,
@@ -254,7 +255,8 @@ def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
                                                   delay=delay, show=False)
         size = lists_to_list(sizes)
         total_sizes.append(size)
-
+    filename = filename + policy + str(delays) + '.pickle'
+    pickle.dump(total_sizes, open(filename, 'wb'))
     return total_sizes
 
 

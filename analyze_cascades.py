@@ -61,4 +61,3 @@ for i in range(number_of_sectors):
               maxim_prob[i*len(delays_risk)+j],'\n Maximum size of the cascade',
               maximums[i*len(delays_risk)+j])
         j +=1
-        

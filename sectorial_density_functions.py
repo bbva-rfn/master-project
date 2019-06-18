@@ -98,7 +98,7 @@ def run_sectorial_d(graph,mu, beta, recon_policy,delay, iterations,num_sectors):
     return density_by_sector
 
 def plot_sectorial_dataframe(data,filename='images/density/Sectorial_density_SOFT3.png',
-                             title='Secotrial density'):
+                             title='Sectorial density'):
     plt.figure()
     plt.title(title)
     
