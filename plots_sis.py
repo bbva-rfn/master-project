@@ -81,33 +81,6 @@ def beta_plot(g: DiGraph,
     plt.show()
 
 
-def cascade_size_plot(sizes, n):  # n is the number of nodes, if graph is not passed then we need it as argument
-    if type(sizes[0]) == int and len(sizes) > 1:  # meaning there is only one list
-        max_sizes = max(sizes)
-        prob = []
-        for i in range(0, max_sizes + 1):
-            p = 0
-            for j in range(0, len(sizes)):
-                if (i == sizes[j]):
-                    p += 1
-            p = p / n
-            prob.append(p)
-        # now we have a list of probabilities and we need to do cumulative distribution
-        inv_cum = 1 - np.cumsum(prob)
-
-        plt.figure()
-        plt.xlabel('cs')
-        plt.ylabel('1-P(cs<Cs)')
-        plt.xscale('log')
-        plt.yscale('log')
-        plt.plot(np.arange(0, max_sizes + 1), inv_cum)
-        plt.savefig('images/cascade_size.png')
-        plt.show()
-    else:
-        print('Not implemented yet for larger sizes')
-
-
-
 def density_plot(g:DiGraph, 
                   mu = 0.4, 
                   beta = 0.6,
@@ -287,4 +260,3 @@ def run_beta(graph,mu, beta, recon_policy,default_delay, max_iterations,num_sect
         prob_by_sector_total[j] = np.mean(prob_by_sector[j,:])
 
     return prob_by_sector_total
-    
