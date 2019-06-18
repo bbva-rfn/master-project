@@ -28,10 +28,12 @@ def compare_density(graph:DiGraph,mu = 0.2,beta=0.6,max_iterations=150,repetitio
     
     final_densities= []
     for delay in delays:
-        densities = Parallel(n_jobs=-1)(delayed(run_density)(graph,mu, beta, recon_policy,delay, max_iterations) for _ in repetitions)
+        densities = []
+        densities = Parallel(n_jobs=-1)(delayed(run_density)(graph,mu, beta, recon_policy,
+                             delay, max_iterations) for _ in range(repetitions))
         #whatever
         densities = np.reshape(densities,(repetitions,max_iterations))
-        final_densities.append(np.mean(densities,axis = 1))
+        final_densities.append(np.mean(densities,axis = 0))
     
     filename = filename + policy + str(delays)+ '.pickle'
     
@@ -39,9 +41,11 @@ def compare_density(graph:DiGraph,mu = 0.2,beta=0.6,max_iterations=150,repetitio
     
     return final_densities
 
-def run_density(g:DiGraph,mu,beta,policy,delay,max_iterations):
+def run_density(graph:DiGraph,mu,beta,policy,delay,max_iterations):
     
-    sn = SecNet(g,mu,beta,ReconnectionPolicy = policy,default_delay=delay)
+    g = graph.copy()
+    
+    sn = SecNet(g,mu,beta,reconnection_policy=policy,default_delay=delay)
     
     sn.run(max_iterations)
     
