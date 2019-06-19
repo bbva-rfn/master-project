@@ -2,13 +2,13 @@ from cascades import plot_cascade_sizes,cascades_sizes_multiple
 import pickle
 import time
 
-start = time.time
+start = time.time()
 g = pickle.load(open('graphs/new.pickle', 'rb'))
 
 sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[2,3,4,5],policy='SOFT',repetitions=30)
 
 
-end = time.time
+end = time.time()
 
 print(end-start)
 
