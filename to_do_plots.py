@@ -17,9 +17,7 @@ density_plot(g,
              mu = 0.2, 
              beta = 0.6,
              iterations = 200)
-         
-'''
-
+      
 
 # definings how many itereations we want to do. 
 niter = 100
@@ -33,3 +31,8 @@ pct = pct_density(density,
                   niter = niter)
 
 print(pct)
+   
+'''
+
+
+results_BA1 = pickle.load(open('BA/results/comparison_ratio2_SOFT[1, 3, 5, 7].pickle', 'rb'))
