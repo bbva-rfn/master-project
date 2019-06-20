@@ -4,35 +4,35 @@ from sis_delay_comparison import compare_density,plot_comparison_densities
 from sectorial_density_functions import sectorial_density,plot_sectorial_dataframe
 import pickle
 import time
-#nx.draw(g,node_size=1)
+
 
 
 
 start = time.time()
-g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
-
-sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[2,3,4,5],policy='RANDOM',repetitions=30,
-                                filename='BA/results/cascades_ratio2')
+g = pickle.load(open('ER/graph_er.pickle', 'rb'))
+'''
+sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.6,delays=[2,3,4,5],policy='SOFT',repetitions=30,
+                                filename='ER/results/cascades_ratio3')
 
 #sizes = pickle.load(open('BA/results/cascade_sizeSOFT[2, 3, 4, 5].pickle','rb'))
-
 end = time.time()
 
 print(end-start)
 
-plot_cascade_sizes(sizes,delays=[1,3,5,7],ylim = 10e-4,colors=['r','g','b'],
-                   filename='BA/images/cascades_ratio2-RANDOM.png')
+plot_cascade_sizes(sizes,delays=[2,3,4,5],ylim = 10e-4,colors=['r','g','b','k'],
+                   filename='ER/images/cascades_ratio3-SOFT.png')
 
 
 start = time.time()
-
-densities = compare_density(g,mu = 0.2,beta=0.4,repetitions=8,max_iterations=150,policy = 'RANDOM',
-                            delays=[1,3,5,7],filename='BA/results/comparison_ratio2_')
+'''
+densities = compare_density(g,mu = 0.2,beta=0.4,repetitions=8,max_iterations=150,policy = 'SOFT',
+                            delays=[9,10,11],filename='ER/results/comparison_ratio2_')
 end = time.time()
 print(end - start)
 
-plot_comparison_densities(densities,delays=[1,3,5,7],
-                          filename='BA/images/comparison3_ratio2_RANDOM.png')
+plot_comparison_densities(densities,delays=[9,10,11],
+                          filename='ER/images/comparison3_ratio2_SOFT.png')
+
 
 '''
 start = time.time()
