@@ -39,7 +39,7 @@ for node_id in graph.nodes:
     sector_data = sectors[sector]
     defaulted_prob = sector_data['default']
 
-    num_connections = max(1, round(np.random.normal(sector_data['out'])))
+    num_connections = max(1, round(np.random.normal(sector_data['out'], sector_data['out'] / 10)))
     connected_node_ids = get_connections(node_id, num_connections)
 
     weights_val = 1 / num_connections

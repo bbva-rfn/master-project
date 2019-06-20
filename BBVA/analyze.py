@@ -6,7 +6,7 @@ graph = pickle.load(open('bbva.pickle', 'rb'))
 
 latexString = """
 \\begin{table}[htp]
-    \\begin{tabular}{c|cccc}
+    \\begin{tabular}{l|cccc}
     sector & size(\%)  & $k_{in}$ & $k_{out}$ & default ( \%) \\\\ \hline
 """
 
