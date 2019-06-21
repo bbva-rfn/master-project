@@ -25,13 +25,13 @@ plot_cascade_sizes(sizes,delays=[2,3,4,5],ylim = 10e-4,colors=['r','g','b','k'],
 
 start = time.time()
 '''
-densities = compare_density(g,mu = 0.2,beta=0.6,repetitions=10,max_iterations=150,policy = 'SOFT',
-                            delays=[3,5],filename='ER/results/comparison_ratio3_')
+densities = compare_density(g,mu = 0.2,beta=0.4,repetitions=20,max_iterations=150,policy = 'RANDOM',
+                            delays=[9,10,11],filename='ER/results/comparison2_ratio2_')
 end = time.time()
 print(end - start)
 
-plot_comparison_densities(densities,delays=[3,5],
-                          filename='ER/images/comparison2_ratio3_SOFT.png')
+plot_comparison_densities(densities,delays=[9,10,11],
+                          filename='ER/images/comparison3_ratio3_RANDOM.png')
 
 
 '''
