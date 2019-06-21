@@ -39,7 +39,7 @@ def replicate_density(niter = 100,
 
 
 def pct_density(dens,
-                niter = 2):
+                niter = 100):
     count = 0
     for i in range(niter):
         if (np.array(dens[i]) > 0.1):
