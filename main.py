@@ -12,7 +12,7 @@ g = pickle.load(open('ER/graph_er.pickle', 'rb'))
 start = time.time()
 
 name_or = 'ER/results/density_ratio3_RANDOM'
-for delay in [2,3]:
+for delay in [3,4,5]:
     name = name_or+str(delay)+'.pickle'
     name2 = 'ER/images/density_ratio3_RANDOM'+str(delay)+'.png'
     densities = density_with_sigma(g,beta=0.6,delay=delay,repetitions=100,
