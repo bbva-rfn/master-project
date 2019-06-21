@@ -18,6 +18,8 @@ for delay in [5,6,7,8]:
     densities = density_with_sigma(g,beta=0.4,delay=delay,repetitions=100,filename=name)
     d_aux = densities[densities['Iteration']==140]['Density']>0.35
     print(d_aux.sum()/len(d_aux))
+    d_aux = densities[densities['Iteration']==140]['Density']<0.05
+    print(d_aux.sum()/len(d_aux))
     plot_density_sigma(densities,filename=name2)
     
 end = time.time()
