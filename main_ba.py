@@ -7,32 +7,38 @@ import time
 #nx.draw(g,node_size=1)
 
 
-
+'''
 start = time.time()
 g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 
-sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[2,3,4,5],policy='RANDOM',repetitions=30,
+sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[6,7,8],policy='RANDOM',repetitions=30,
                                 filename='BA/results/cascades_ratio2')
 
-#sizes = pickle.load(open('BA/results/cascade_sizeSOFT[2, 3, 4, 5].pickle','rb'))
+#sizes = pickle.load(open('BA/results/cascade_sizeSOFT1[6,7,8].pickle','rb'))
 
 end = time.time()
 
 print(end-start)
 
-plot_cascade_sizes(sizes,delays=[1,3,5,7],ylim = 10e-4,colors=['r','g','b'],
+g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
+sizes = pickle.load(open('BA/results/cascades_ratio2RANDOM[6, 7, 8].pickle','rb'))
+
+plot_cascade_sizes(sizes,delays=[6,7,8],ylim = 10e-4,colors=['r','g','b'],
                    filename='BA/images/cascades_ratio2-RANDOM.png')
 
 
+'''
 start = time.time()
+g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 
+sizes = pickle.load(open('BA/results/cascades_ratio2RANDOM[2, 3, 4, 5].pickle','rb'))
 densities = compare_density(g,mu = 0.2,beta=0.4,repetitions=8,max_iterations=150,policy = 'RANDOM',
-                            delays=[1,3,5,7],filename='BA/results/comparison_ratio2_')
+                            delays=[6,7,8],filename='BA/results/comparison_ratio2_')
 end = time.time()
 print(end - start)
 
-plot_comparison_densities(densities,delays=[1,3,5,7],
-                          filename='BA/images/comparison3_ratio2_RANDOM.png')
+plot_comparison_densities(densities,delays=[6,7,8],
+                          filename='BA/images/comparison_ratio2_RANDOM.png')
 
 '''
 start = time.time()
