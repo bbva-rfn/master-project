@@ -6,48 +6,23 @@ from SecNet import SecNet, ReconnectionPolicy
 import time
 import networkx as nx
 import matplotlib.pyplot as plt
-from sectorial_density_functions import density_with_sigma,plot_density_sigma
 
-g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
+g = pickle.load(open('ER/graph_er.pickle', 'rb'))
+start = time.time()
 
-    
-def pct_density(dens,
-                niter = 100):
-    d_aux = dens[dens['Iteration']== 140]['Density'].values
-    count = 0
-    for i in range(niter):
-        if (np.array(d_aux)[i] > 0.4):
-            count = count + 1       
-    percnt = (count/niter)
-    return (percnt)
-
-def pct_density_inv(dens,
-                niter = 100):
-    d_aux = dens[dens['Iteration']== 140]['Density'].values
-    count = 0
-    for i in range(niter):
-        if (np.array(d_aux)[i] <  0.05):
-            count = count + 1       
-    percnt = (count/niter)
-    return (percnt)
-
-
-name_or = 'BA/results/density_2_SOFT'
-for delay in [7,8,9,10]:
+name_or = 'ER/results/density_ratio3_RANDOM'
+for delay in [3,4,5]:
     name = name_or+str(delay)+'.pickle'
-    name2 = 'BA/images/replicate/density_2_SOFT'+str(delay)+'.png'
-    densities = density_with_sigma(g,beta=0.4,delay = delay,repetitions=100,filename=name)
+    name2 = 'ER/images/density_ratio3_RANDOM'+str(delay)+'.png'
+    densities = density_with_sigma(g,beta=0.6,delay=delay,repetitions=100,
+                                   policy=ReconnectionPolicy.RANDOM,filename=name)
+    d_aux = densities[densities['Iteration']==140]['Density']>0.35
+    print(d_aux.sum()/len(d_aux))
+    d_aux = densities[densities['Iteration']==140]['Density']<0.05
+    print(d_aux.sum()/len(d_aux))
     plot_density_sigma(densities,filename=name2)
-    pct1 = pct_density(densities,
-                niter = 100 )
-    print(pct1)
-    pct2 = pct_density_inv(densities,
-                niter = 100 )
     
-    print(pct2)
-
-
-
+end = time.time()
 
 '''
 start = time.time()
