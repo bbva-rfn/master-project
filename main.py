@@ -5,9 +5,18 @@ from joblib import Parallel, delayed
 from SecNet import SecNet, ReconnectionPolicy
 import time
 import networkx as nx
+import matplotlib.pyplot as plt
+from sectorial_density_functions import density_with_sigma,plot_density_sigma
+
 
 start = time.time()
 
+g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
+
+densities = density_with_sigma(g)
+plot_density_sigma(densities)
+
+'''
 g = pickle.load(open('ER/graph_er.pickle', 'rb'))
 
 print(g.number_of_nodes())
@@ -15,7 +24,7 @@ print(g.number_of_edges())
 for node_id in g.nodes:
     node = g.nodes[node_id]
     print(node_id,node['sector'])
-'''
+
 def run():
     sn = SecNet(g, mu=0.2, beta=0.6, reconnection_policy=ReconnectionPolicy.SOFT)
     sn.run(30, verbose=False)

@@ -34,9 +34,8 @@ def sectorial_density(graph:DiGraph,mu=0.2,beta=0.6,policy='RANDOM',delay = 2,
     
     if on_dataframe:
         density_dataframe = pd.DataFrame(columns=['Sector','Iteration','Density'])
-        
-        for i in range(repetitions):
-            z = 0
+        z = 0
+        for i in range(repetitions): 
             for sector in range(num_sectors):
                 for j in range(iterations):
                     density_dataframe.loc[z] = [sector,j,density_sectorial[i][sector,j]]
@@ -123,4 +122,23 @@ def plot_sectorial_density(mean_density_sectorial,max_density_sectorial,min_dens
     if save:
         plt.savefig(filename)
         
+    plt.show()
+    
+def density_with_sigma(graph,mu=0.2,beta=0.6,policy=ReconnectionPolicy.SOFT,delay = 6,
+                       repetitions=10,filename = 'BA/results/densitySOFT6.pikle'):
+    
+    densities = pd.DataFrame(columns=['Iteration','Density','delay'])
+    for i in range(repetitions):
+        sn = SecNet(graph, mu, beta, reconnection_policy=policy,default_delay=delay)
+        sn.run(150)
+        for j in range(150):
+            densities.loc[j*i+j]=[j,sn.defaulted_density[j],delay]
+            
+    densities.to_pickle(filename)
+    return densities
+
+def plot_density_sigma(data,filename='BA/images/densSOFT6.png'):
+    plt.figure()
+    ax = sns.lineplot(x='Iteration', y='Density', data=data)
+    plt.savefig(filename)
     plt.show()
