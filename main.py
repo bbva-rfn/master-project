@@ -1,12 +1,11 @@
 import pickle
 
 from joblib import Parallel, delayed
-
+import numpy as np
 from SecNet import SecNet, ReconnectionPolicy
 import time
 import networkx as nx
 import matplotlib.pyplot as plt
-from sectorial_density_functions import density_with_sigma,plot_density_sigma
 
 g = pickle.load(open('ER/graph_er.pickle', 'rb'))
 start = time.time()
@@ -24,6 +23,7 @@ for delay in [3,4,5]:
     plot_density_sigma(densities,filename=name2)
     
 end = time.time()
+
 '''
 start = time.time()
 g = pickle.load(open('BBVA/bbva.pickle', 'rb'))
