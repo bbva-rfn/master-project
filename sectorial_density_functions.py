@@ -130,9 +130,9 @@ def density_with_sigma(graph,mu=0.2,beta=0.6,policy=ReconnectionPolicy.SOFT,dela
     densities = pd.DataFrame(columns=['Iteration','Density','delay'])
     for i in range(repetitions):
         sn = SecNet(graph, mu, beta, reconnection_policy=policy,default_delay=delay)
-        sn.run(150)
-        for j in range(150):
-            densities.loc[j*i+j]=[j,sn.defaulted_density[j],delay]
+        sn.run(200)
+        for j in range(200):
+            densities.loc[200*i+j]=[j,sn.defaulted_density[j],delay]
             
     densities.to_pickle(filename)
     return densities
