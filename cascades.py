@@ -20,7 +20,22 @@ def cascade_origins(graph: DiGraph):
 
     return origins
 
+def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
+    s= 0
+    node = graph.nodes[node_id]
+    available = [item for item in graph.nodes if item not in already_considered_nodes]
+    for node_i in available:
+        node_new = graph.nodes[node_i]
+        if node_new['first_defaulted_at'] > node['first_defaulted_at'] and \
+                node_id in node_new['all_connected_nodes']:
+            already_considered_nodes.append(node_new['id'])
+            s += check_infected_neighbours_recursive(graph, node_new['id'], already_considered_nodes)
+            s += 1
 
+    return s
+
+'''
+Past check neighbours, for casade size we need to go the other way arround
 def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
     s = 0
     node = graph.nodes[node_id]
@@ -34,15 +49,16 @@ def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_conside
             s += 1
 
     return s
-
+'''
 
 def check_cascade_size_recursive(graph: DiGraph):
     origins = cascade_origins(graph)
     sizes = []
     already_considered_nodes = []
     for origin in origins:
-        already_considered_nodes.append(origin)
-        sizes.append(check_infected_neighbours_recursive(graph, origin, already_considered_nodes))
+        if(origin not in already_considered_nodes):
+            already_considered_nodes.append(origin) 
+            sizes.append(check_infected_neighbours_recursive(graph, origin, already_considered_nodes))
     return sizes
 
 
