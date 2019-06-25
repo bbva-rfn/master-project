@@ -3,12 +3,12 @@ import pickle
 import time
 
 start = time.time()
-g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
+g = pickle.load(open('ER/graph_er.pickle', 'rb'))
 
 
 
 sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.6,delays=[1,6],policy='SOFT',repetitions=30,
-                                filename='BA/results/cascades/')
+                                filename='ER/results/cascades/')
 
 end = time.time()
 

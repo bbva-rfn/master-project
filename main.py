@@ -16,12 +16,13 @@ d_aux = densities[densities['Iteration']==145]['Density']<0.05
 print(d_aux.sum()/len(d_aux))
 
 '''
-g = pickle.load(open('ER/graph_er.pickle', 'rb'))
+g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 
 start = time.time()
 
-name_or = 'ER/results/density_control3.pickle'
-name2 = 'ER/images/density_control3.png'
+
+name_or = 'BA/results/density_control3.pickle'
+name2 = 'BA/images/density_control3.png'
 
 densities = density_with_sigma(g,beta=0.6,delay=1,repetitions=100,
                                    policy=ReconnectionPolicy.NONE,filename=name_or)
