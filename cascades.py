@@ -277,7 +277,7 @@ def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
     return total_sizes
 
 
-def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
+def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], title='Title',
                        ylim = None ,filename='images/cascades/comparison_plot.png'):
     plt.figure()
     plt.xlabel('Cascade size (Cs)')
@@ -304,9 +304,10 @@ def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
         inv_cum = 1 - np.cumsum(prob)
         max_prob.append([delays[k], most_probable(prob, max_size)])
         lab = 'delay ' + str(delays[k])
-        plt.plot(np.arange(0, max_size + 1), inv_cum, color=colors[k], label=lab)
+        plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
         k += 1
     plt.legend()
+    plt.title(title)
     plt.tight_layout()
     plt.savefig(filename)
     plt.show()
@@ -413,7 +414,7 @@ def sectorial_cascades_sizes(graph: DiGraph, num_sectors, repetitions_per_node=1
     
     return sector_sizes
 
-def plot_sectorial_cascades(sizes,ylim = None,title='Title',
+def plot_sectorial_cascades(sizes,ylim = None,title='Title', 
                             filename = 'images/cascades/sectorial_cascades.png'):
     
     plt.figure()
@@ -444,6 +445,8 @@ def plot_sectorial_cascades(sizes,ylim = None,title='Title',
         inv_cum = 1 - np.cumsum(prob)
         
         lab = 'Sector ' + str(k)
+        
+            
         plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
         k += 1
     plt.legend()
