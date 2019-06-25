@@ -31,14 +31,14 @@ plot_cascade_sizes(sizes,delays=[6,7,8],ylim = 10e-4,colors=['r','g','b'],
 start = time.time()
 g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 
-sizes = pickle.load(open('BA/results/cascades_ratio2RANDOM[2, 3, 4, 5].pickle','rb'))
-densities = compare_density(g,mu = 0.2,beta=0.4,repetitions=8,max_iterations=150,policy = 'RANDOM',
-                            delays=[6,7,8],filename='BA/results/comparison_ratio2_')
+#sizes = pickle.load(open('BA/results//cascades/cascades_ratio2RANDOM[2, 3, 4, 5].pickle','rb'))
+densities = compare_density(g,mu = 0.2,beta=0.6,repetitions=10,max_iterations=150,policy = 'RANDOM',
+                            delays=[2,4,6],filename='BA/results/comparison_ratio3_')
 end = time.time()
 print(end - start)
 
-plot_comparison_densities(densities,delays=[6,7,8],
-                          filename='BA/images/comparison_ratio2_RANDOM.png')
+plot_comparison_densities(densities,delays=[2,4,6],
+                          filename='BA/images/comparison2_ratio3_RANDOM.png')
 
 '''
 start = time.time()

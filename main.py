@@ -6,9 +6,17 @@ from SecNet import SecNet, ReconnectionPolicy
 import time
 import networkx as nx
 import matplotlib.pyplot as plt
+import pandas as pd
 
+densities = pd.read_pickle('ER/results/density/density_ratio2_RANDOM10.pickle')
+d_aux = densities[densities['Iteration']==145]['Density']>0.35
+print(d_aux.sum()/len(d_aux))
+d_aux = densities[densities['Iteration']==145]['Density']<0.05
+print(d_aux.sum()/len(d_aux))
 
-g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
+'''
+g = pickle.load(open('ER/graph_er.pickle', 'rb'))
+
 start = time.time()
 
 name_or = 'BA/results/density_ratio2_SOFT'
@@ -24,7 +32,7 @@ for delay in [5,6]:
     plot_density_sigma(densities,filename=name2)
     
 end = time.time()
-
+'''
 '''
 start = time.time()
 g = pickle.load(open('BBVA/bbva.pickle', 'rb'))
