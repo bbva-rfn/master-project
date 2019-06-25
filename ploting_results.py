@@ -1,20 +1,12 @@
 import pickle
+from plots_sis import plot_sectorial_multi_beta
+import numpy as np
 
-import time
-from sis_delay_comparison import plot_comparison_densities
+probs = pickle.load(open('BBVA/results/density_sectorialSOFT2.pickle', 'rb'))
 
-d1 = pickle.load(open('BA/results/comparison_ratio3_RANDOM[1, 3, 5].pickle', 'rb'))
-d2 = pickle.load(open('BA/results/comparison_ratio3_RANDOM[2, 4, 6].pickle', 'rb'))
-#d3 = pickle.load(open('BA/results/comparison_ratio2_RANDOM[9, 10, 11].pickle', 'rb'))
-start = time.time()
+names = {'0':'Stark' , '1':'Bolton', '2':'Umber','3':'Manderly','4':'Hornwood','5':'Glover',
+         '6':'Tallhart','7':'Dustin','8':'Reed','9':'Flynt','10':'Mormont','11':'Karstark',
+         '12':'Cassel','13':'Poole','14': 'Frey'  ,'15': 'Tully','16':'Mallister','17':'Snow'}
 
-for d in d2:
-    d1.append(d)
-'''
-for d in d3:
-    d1.append(d)
-'''
-plot_comparison_densities(d1, title='RANDOM policy', delays=[1, 2, 3, 4, 5, 6],
-                          filename='BA/images/delay_comparison_RANDOM3.png')
-
-end = time.time()
+betas = np.arange(0,1,0.1)
+plot_sectorial_multi_beta(probs,names,betas,filename='BBVA/images/sectorial_density1.png')

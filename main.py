@@ -8,7 +8,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
 
-densities = pd.read_pickle('ER/results/density/density_ratio2_RANDOM10.pickle')
+densities = pd.read_pickle('BA/results/density/density_ratio3_SOFT3.pickle')
 
 d_aux = densities[densities['Iteration']==145]['Density']>0.35
 print(d_aux.sum()/len(d_aux))
