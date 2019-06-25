@@ -302,7 +302,7 @@ def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], title='Title',
             prob.append(p)
         # now we have a list of probabilities and we need to do cumulative distribution
         inv_cum = 1 - np.cumsum(prob)
-        max_prob.append([delays[k], most_probable(prob, max_size)])
+        max_prob.append([delays[k], most_probable(prob, max_size),max_size])
         lab = 'delay ' + str(delays[k])
         plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
         k += 1
