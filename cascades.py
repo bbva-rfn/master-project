@@ -66,7 +66,7 @@ def check_cascade_size_recursive(graph: DiGraph):
 def full_check_cascade_size_recursive(graph: DiGraph, repetitions=25, max_iterations=100,
                                       mu=0.2, beta=0.6, delay=2, weight_transfer=False,
                                       show=False, policy='RANDOM'):
-    sizes = Parallel(n_jobs=-1)(delayed(run_simulation)(graph, mu, beta, policy, delay, weight_transfer, max_iterations, show) for _ in range(repetitions))
+    sizes = Parallel(n_jobs=-1, verbose=10)(delayed(run_simulation)(graph, mu, beta, policy, delay, weight_transfer, max_iterations, show) for _ in range(repetitions))
     return sizes
 
 

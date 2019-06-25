@@ -54,7 +54,7 @@ class SecNet:
     def init_default_delay(self):
         set_node_attributes(self.graph, 0, name='defaulted_turns')
 
-    def run(self, max_iter=100, varcoeff_iteration_range=10, variation_coeff=None, burn_in=0, verbose=True):
+    def run(self, max_iter=100, varcoeff_iteration_range=10, variation_coeff=None, burn_in=0, verbose=False):
         """
         Runs the simulation.
 
