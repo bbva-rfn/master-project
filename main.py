@@ -20,6 +20,7 @@ g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 
 start = time.time()
 
+
 name_or = 'BA/results/density_control3.pickle'
 name2 = 'BA/images/density_control3.png'
 
