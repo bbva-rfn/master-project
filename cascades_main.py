@@ -17,4 +17,4 @@ print(end-start)
 print(sizes)
 
 plot_cascade_sizes(sizes,delays=[2,3,4,5],ylim = 10e-4,colors=['r','g','b','k'],
-                   filename='ER/images/cascades/compa2_RANDOM3.png')
+                   filename='ER/images/cascades/compa_SOFT3.png')
