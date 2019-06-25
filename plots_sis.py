@@ -220,7 +220,7 @@ def sectorial_multi_beta_paral(g: DiGraph, mu = 0.1, beta_lapse = 0.02, repetiti
     
     density_probs = []
     
-    density_probs = Parallel(n_jobs=-1)(delayed(run_beta)(g,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
+    density_probs = Parallel(n_jobs=-1, verbose=20)(delayed(run_beta)(g,mu, beta, recon_policy,default_delay, max_iterations,num_sectors,repetitions) for beta in betas)
     #density_probs.append(prob_by_sector)
     
     probs_by_sector = construct_probs_by_sector(density_probs)
