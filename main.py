@@ -1,5 +1,5 @@
 import pickle
-
+from sectorial_density_functions import density_with_sigma,plot_density_sigma
 from joblib import Parallel, delayed
 import numpy as np
 from SecNet import SecNet, ReconnectionPolicy
@@ -7,15 +7,16 @@ import time
 import networkx as nx
 import matplotlib.pyplot as plt
 
-g = pickle.load(open('ER/graph_er.pickle', 'rb'))
+
+g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 start = time.time()
 
-name_or = 'ER/results/density_ratio3_RANDOM'
-for delay in [3,4,5]:
+name_or = 'BA/results/density_ratio2_SOFT'
+for delay in [5,6]:
     name = name_or+str(delay)+'.pickle'
-    name2 = 'ER/images/density_ratio3_RANDOM'+str(delay)+'.png'
-    densities = density_with_sigma(g,beta=0.6,delay=delay,repetitions=100,
-                                   policy=ReconnectionPolicy.RANDOM,filename=name)
+    name2 = 'BA/images/density_ratio2_SOFT'+str(delay)+'.png'
+    densities = density_with_sigma(g,beta=0.4,delay=delay,repetitions=100,
+                                   policy=ReconnectionPolicy.SOFT,filename=name)
     d_aux = densities[densities['Iteration']==140]['Density']>0.35
     print(d_aux.sum()/len(d_aux))
     d_aux = densities[densities['Iteration']==140]['Density']<0.05
