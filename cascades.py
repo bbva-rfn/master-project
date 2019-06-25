@@ -79,6 +79,9 @@ def run_simulation(graph, mu, beta, policy, delay, weight_transfer, max_iteratio
     elif policy == 'SOFT':
         sn = SecNet(g, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
                     default_delay=delay, weight_transfer=weight_transfer)
+    elif policy =='NONE':
+        sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.NONE,
+                    default_delay=delay, weight_transfer=weight_transfer)
     else:
         print('Policy not understood')
         return 0
