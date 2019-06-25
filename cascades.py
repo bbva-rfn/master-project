@@ -293,7 +293,7 @@ def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], title='Title',
         
     k = 0
     max_prob = []
-    for size in sizes:
+    for delay,size in sorted(zip(delays, sizes)):
         max_size = max(size)
         np.sqrt(np.sum(size))
         prob = []
