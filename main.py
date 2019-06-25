@@ -8,22 +8,34 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
 
-
-densities = pd.read_pickle('ER/results/density/density_ratio2_RANDOM10.pickle')
+'''
+densities = pd.read_pickle('BA/results/density/density_ratio3_RANDOM4.pickle')
 d_aux = densities[densities['Iteration']==145]['Density']>0.35
 print(d_aux.sum()/len(d_aux))
 d_aux = densities[densities['Iteration']==145]['Density']<0.05
 print(d_aux.sum()/len(d_aux))
 
 '''
-g = pickle.load(open('ER/graph_er.pickle', 'rb'))
+g = pickle.load(open('BA/graph_ba.pickle', 'rb'))
 
 start = time.time()
 
-name_or = 'BA/results/density_ratio2_SOFT'
+
+name_or = 'BA/results/density_control3.pickle'
+name2 = 'BA/images/density_control3.png'
+
+densities = density_with_sigma(g,beta=0.6,delay=1,repetitions=100,
+                                   policy=ReconnectionPolicy.NONE,filename=name_or)
+d_aux = densities[densities['Iteration']==140]['Density']>0.35
+print(d_aux.sum()/len(d_aux))
+d_aux = densities[densities['Iteration']==140]['Density']<0.05
+print(d_aux.sum()/len(d_aux))
+plot_density_sigma(densities,filename=name2)
+    
+'''    
 for delay in [5,6]:
     name = name_or+str(delay)+'.pickle'
-    name2 = 'BA/images/density_ratio2_SOFT'+str(delay)+'.png'
+    name2 = 'ER/images/density_control'+str(delay)+'.png'
     densities = density_with_sigma(g,beta=0.4,delay=delay,repetitions=100,
                                    policy=ReconnectionPolicy.SOFT,filename=name)
     d_aux = densities[densities['Iteration']==140]['Density']>0.35
@@ -31,9 +43,9 @@ for delay in [5,6]:
     d_aux = densities[densities['Iteration']==140]['Density']<0.05
     print(d_aux.sum()/len(d_aux))
     plot_density_sigma(densities,filename=name2)
-    
+'''  
 end = time.time()
-'''
+
 '''
 start = time.time()
 g = pickle.load(open('BBVA/bbva.pickle', 'rb'))

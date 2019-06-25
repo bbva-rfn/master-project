@@ -110,6 +110,10 @@ def run_simulation_set(graph,node_id, mu, beta, policy,
     elif policy == 'SOFT':
         sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.SOFT,
                     default_delay=delay, weight_transfer=weight_transfer)
+        
+    elif policy =='NONE':
+        sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.NONE,
+                    default_delay=delay, weight_transfer=weight_transfer)
     else:
         print('Policy not understood')
         return 0
@@ -277,7 +281,7 @@ def cascades_sizes_multiple(graph: DiGraph, repetitions=25, max_iterations=100,
     return total_sizes
 
 
-def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
+def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], title='Title',
                        ylim = None ,filename='images/cascades/comparison_plot.png'):
     plt.figure()
     plt.xlabel('Cascade size (Cs)')
@@ -302,11 +306,12 @@ def plot_cascade_sizes(sizes: list, delays=[2, 4, 6], colors=['r', 'g', 'b'],
             prob.append(p)
         # now we have a list of probabilities and we need to do cumulative distribution
         inv_cum = 1 - np.cumsum(prob)
-        max_prob.append([delays[k], most_probable(prob, max_size)])
+        max_prob.append([delays[k], most_probable(prob, max_size),max_size])
         lab = 'delay ' + str(delays[k])
-        plt.plot(np.arange(0, max_size + 1), inv_cum, color=colors[k], label=lab)
+        plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
         k += 1
     plt.legend()
+    plt.title(title)
     plt.tight_layout()
     plt.savefig(filename)
     plt.show()
