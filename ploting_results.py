@@ -13,11 +13,13 @@ names = {'0':'Stark' , '1':'Bolton', '2':'Umber','3':'Manderly','4':'Hornwood','
 
 betas = np.arange(0,1,0.1)
 plot_sectorial_multi_beta(probs,names,betas,filename='BBVA/images/sectorial_density1.png')
+'''
 
 densities = pickle.load(open('BBVA/results/comparison_ratio2_SOFT[1, 2, 3, 4, 5, 6, 7].pickle', 'rb'))
-
-plot_comparison_densities(densities,delays=[1,2,3,4,5,6,7],
-                          filename='BBVA/images/comparison_ratio2_SOFT.png')
+densities2 = pickle.load(open('BBVA/results/comparison_ratio2_SOFT[8, 9].pickle', 'rb'))
+[densities.append(dens) for dens in densities2]
+plot_comparison_densities(densities,delays=[1,2,3,4,5,6,7,8,9],
+                          filename='BBVA/images/comparison_final_ratio2_SOFT.png')
 
 
 
@@ -32,3 +34,4 @@ res = plot_cascade_sizes(sizes1,delays=[1,6,2,3,4,5],title='0.6',ylim=10e-4,
                    filename='BA/images/cascades/full2_ratio3.png')
 
 print(res)
+'''
