@@ -27,7 +27,8 @@ def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_conside
     for node_i in available:
         node_new = graph.nodes[node_i]
         if node_new['first_defaulted_at'] > node['first_defaulted_at'] and \
-                node_id in node_new['all_connected_nodes']:
+                node_id in node_new['all_connected_nodes'] and \
+                node_i not in already_considered_nodes:
             already_considered_nodes.append(node_new['id'])
             s += check_infected_neighbours_recursive(graph, node_new['id'], already_considered_nodes)
             s += 1
@@ -449,5 +450,13 @@ def plot_sectorial_cascades(sizes,ylim = None,title='Title',
     plt.tight_layout()
     plt.savefig(filename)
     plt.show()
-            
-        
+    
+ 
+'''           
+def run_and_save(graph: DiGraph, repetitions=5, max_iterations=100,
+                            mu=0.2, beta=0.6,
+                            policy=ReconnectionPolicy.RANDOM, delay=[4, 6],
+                            weight_transfer=False,
+                            filename='results/sn'):    
+    
+'''
