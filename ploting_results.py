@@ -22,13 +22,13 @@ plot_comparison_densities(densities,delays=[1,2,3,4,5,6,7],
 
 
 '''
-sizes1 = pickle.load(open('ER/results/cascades/SOFT[1, 6].pickle', 'rb'))
-sizes2 = pickle.load(open('ER/results/cascades/ratio3_SOFT[2, 3, 4, 5].pickle', 'rb'))
+sizes1 = pickle.load(open('BA/results/cascades/SOFT[1, 6].pickle', 'rb'))
+sizes2 = pickle.load(open('BA/results/cascades/ratio3_SOFT[2, 3, 4, 5].pickle', 'rb'))
 
 
 [sizes1.append(siz) for siz in sizes2]
 
-res = plot_cascade_sizes(sizes1,delays=[1,6,2,3,4,5],title='0.6',
-                   filename='ER/images/cascades/full2_ratio3.png')
+res = plot_cascade_sizes(sizes1,delays=[1,6,2,3,4,5],title='0.6',ylim=10e-4,
+                   filename='BA/images/cascades/full2_ratio3.png')
 
 print(res)
