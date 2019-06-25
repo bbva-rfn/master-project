@@ -5,9 +5,10 @@ import time
 start = time.time()
 g = pickle.load(open('ER/graph_er.pickle', 'rb'))
 
-sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.6,delays=[2,3,4,5],policy='RANDOM',repetitions=30,
-                                filename='ER/results/cascades/ratio3_')
 
+
+sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[2,3,4,5],policy='RANDOM',repetitions=20,
+                                filename='ER/results/cascades/')
 
 end = time.time()
 
