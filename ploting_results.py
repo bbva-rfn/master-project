@@ -1,5 +1,6 @@
 import pickle
 from plots_sis import plot_sectorial_multi_beta
+from sis_delay_comparison import plot_comparison_densities
 import numpy as np
 
 '''
@@ -13,4 +14,7 @@ betas = np.arange(0,1,0.1)
 plot_sectorial_multi_beta(probs,names,betas,filename='BBVA/images/sectorial_density1.png')
 '''
 
-probs = pickle.load(open('BBVA/results/density_sectorialSOFT2.pickle', 'rb'))
+densities = pickle.load(open('BBVA/results/comparison_ratio3_SOFT[2, 3].pickle', 'rb'))
+
+plot_comparison_densities(densities,delays=[2,3],
+                          filename='BBVA/images/comparison_ratio3_SOFT.png')

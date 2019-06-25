@@ -413,7 +413,7 @@ def sectorial_cascades_sizes(graph: DiGraph, num_sectors, repetitions_per_node=1
     
     return sector_sizes
 
-def plot_sectorial_cascades(sizes,ylim = None,title='Title',
+def plot_sectorial_cascades(sizes,ylim = None,title='Title', 
                             filename = 'images/cascades/sectorial_cascades.png'):
     
     plt.figure()
@@ -444,6 +444,8 @@ def plot_sectorial_cascades(sizes,ylim = None,title='Title',
         inv_cum = 1 - np.cumsum(prob)
         
         lab = 'Sector ' + str(k)
+        
+            
         plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
         k += 1
     plt.legend()
