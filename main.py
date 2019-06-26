@@ -8,8 +8,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
 
-'''
-densities = pd.read_pickle('BA/results/density/density_ratio3_RANDOM4.pickle')
+
+densities = pd.read_pickle('BA/results/density/density_ratio3_RANDOM5.pickle')
 d_aux = densities[densities['Iteration']==145]['Density']>0.35
 print(d_aux.sum()/len(d_aux))
 d_aux = densities[densities['Iteration']==145]['Density']<0.05
@@ -31,7 +31,7 @@ print(d_aux.sum()/len(d_aux))
 d_aux = densities[densities['Iteration']==140]['Density']<0.05
 print(d_aux.sum()/len(d_aux))
 plot_density_sigma(densities,filename=name2)
-    
+'''    
 '''    
 for delay in [5,6]:
     name = name_or+str(delay)+'.pickle'
