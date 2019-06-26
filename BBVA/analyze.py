@@ -2,7 +2,7 @@ import pickle
 
 import numpy as np
 
-graph = pickle.load(open('bbva.pickle', 'rb'))
+graph = pickle.load(open('Barabasi-with-sectors.pickle', 'rb'))
 
 latexString = """
 \\begin{table}[htp]
