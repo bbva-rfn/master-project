@@ -151,6 +151,7 @@ class SecNet:
             graph.add_edge(node['id'], new_node['id'], weight=weight)
 
             node['all_connected_nodes'] = np.append(node['all_connected_nodes'], new_node['id'])
+            new_node['all_connected_nodes_in'] = np.append(new_node['all_connected_nodes_in'], node['id'])
 
     def transfer_weight(self, node, neighbor, neighbor_nodes_by_sector, weight):
         if not self.weight_transfer:
