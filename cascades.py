@@ -23,6 +23,21 @@ def cascade_origins(graph: DiGraph):
 def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
     s= 0
     node = graph.nodes[node_id]
+    available = node['all_connected_nodes_in']
+    for node_i in available:
+        node_new = graph.nodes[node_i]
+        if node_new['first_defaulted_at'] > node['first_defaulted_at'] and \
+                node_i not in already_considered_nodes:
+            already_considered_nodes.append(node_new['id'])
+            s += check_infected_neighbours_recursive(graph, node_new['id'], already_considered_nodes)
+            s += 1
+
+    return s
+'''
+too time expensive
+def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
+    s= 0
+    node = graph.nodes[node_id]
     available = [item for item in graph.nodes if item not in already_considered_nodes]
     for node_i in available:
         node_new = graph.nodes[node_i]
@@ -34,7 +49,7 @@ def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_conside
             s += 1
 
     return s
-
+'''
 '''
 Past check neighbours, for casade size we need to go the other way arround
 def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
