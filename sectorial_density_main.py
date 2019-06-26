@@ -24,7 +24,7 @@ names = {'0':'Sector1' , '1':'Sector2', '2':'Sector3','3':'Sector4','4':'Sector5
          '12':'Cassel','13':'Poole','14': 'Frey'  ,'15': 'Tully','16':'Mallister','17':'Snow'}
 
 
-plot_sectorial_multi_beta(probs,names,betas,filename='ER/images/sectorial.png')
+plot_sectorial_multi_beta(probs,names,betas,filename='BA/images/sectorialSOFT4.png')
 
 
 '''
