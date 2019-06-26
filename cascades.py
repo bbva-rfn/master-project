@@ -23,6 +23,21 @@ def cascade_origins(graph: DiGraph):
 def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
     s= 0
     node = graph.nodes[node_id]
+    available = node['all_connected_nodes_in']
+    for node_i in available:
+        node_new = graph.nodes[node_i]
+        if node_new['first_defaulted_at'] > node['first_defaulted_at'] and \
+                node_i not in already_considered_nodes:
+            already_considered_nodes.append(node_new['id'])
+            s += check_infected_neighbours_recursive(graph, node_new['id'], already_considered_nodes)
+            s += 1
+
+    return s
+'''
+too time expensive
+def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
+    s= 0
+    node = graph.nodes[node_id]
     available = [item for item in graph.nodes if item not in already_considered_nodes]
     for node_i in available:
         node_new = graph.nodes[node_i]
@@ -34,7 +49,7 @@ def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_conside
             s += 1
 
     return s
-
+'''
 '''
 Past check neighbours, for casade size we need to go the other way arround
 def check_infected_neighbours_recursive(graph: DiGraph, node_id, already_considered_nodes):
@@ -96,16 +111,19 @@ def run_simulation(graph, mu, beta, policy, delay, weight_transfer, max_iteratio
 # modification for a general graph with option to change initial defaulted nodes
 def full_check_cascade_size_setting_default(graph: DiGraph, node_id, repetitions=25, mu=0.2, beta=0.6,
                                             delay=2, weight_transfer=False, max_iterations=100,
-                                            show=False, policy='RANDOM'):
+                                            show=False, policy='RANDOM',filename='hola'):
     
     sizes = Parallel(n_jobs=-1)(delayed(run_simulation_set)(graph,node_id, mu, beta, policy,delay, weight_transfer, max_iterations, show) for _ in range(repetitions))
+    #store only when executed alone
+    filename = filename + policy + str(delay) + '.pickle'
+    pickle.dump(sizes, open(filename, 'wb'))
     return sizes
 
 
 def run_simulation_set(graph,node_id, mu, beta, policy,
                      delay, weight_transfer, max_iterations, show):
 
-    set_initial_defaults(graph, node_id)
+    graph = set_initial_defaults(graph, node_id)
     
     if policy == 'RANDOM':
         sn = SecNet(graph, mu, beta, reconnection_policy=ReconnectionPolicy.RANDOM,
@@ -212,7 +230,7 @@ def nice_cascade_plot_comparison(graph: DiGraph, repetitions=25, mu=0.2, beta=0.
 def nice_cascade_plot_comparison_setting_defaults(graph: DiGraph, node_id, repetitions=25,
                                                   max_iterations=100, mu=0.2, beta=0.6,
                                                   delays=[2, 4, 6], 
-                                                  colors=['r', 'b', 'g'], policy='RANDOM',
+                                                  policy='RANDOM',
                                                   filename='images/nice_cascade_plot_change_default.png'):
     max_prob = []
     plt.figure()
@@ -228,7 +246,7 @@ def nice_cascade_plot_comparison_setting_defaults(graph: DiGraph, node_id, repet
                                                         delay=delay, show=False)
         size = lists_to_list(sizes)
         max_size = max(size)
-        np.sqrt(np.sum(size))
+        
         prob = []
         for i in range(max_size + 1):
             p = 0
@@ -239,9 +257,9 @@ def nice_cascade_plot_comparison_setting_defaults(graph: DiGraph, node_id, repet
             prob.append(p)
         # now we have a list of probabilities and we need to do cumulative distribution
         inv_cum = 1 - np.cumsum(prob)
-        max_prob.append([delay, most_probable(prob, max_size)])
+        max_prob.append([delay, most_probable(prob, max_size),max_size])
         lab = 'delay ' + str(delay)
-        plt.plot(np.arange(0, max_size + 1), inv_cum, color=colors[k], label=lab)
+        plt.plot(np.arange(0, max_size + 1), inv_cum, label=lab)
         k += 1
     plt.legend()
     plt.tight_layout()
