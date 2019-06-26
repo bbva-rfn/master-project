@@ -5,8 +5,8 @@ import time
 start = time.time()
 g = pickle.load(open('BBVA/bbva.pickle', 'rb'))
 
-sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[5,6],policy='SOFT',repetitions=50,
-				filename='BBVA/results/cascades_')
+sizes = cascades_sizes_multiple(g,mu=0.2,beta=0.4,delays=[0],policy='NONE',repetitions=50,
+				filename='BBVA/results/cascades_ratio2_')
 
 end = time.time()
 
