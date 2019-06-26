@@ -11,6 +11,8 @@ def set_initial_defaults(graph:DiGraph,node_id):
             node['defaulted'] = 1
         else:
             node['defaulted'] = 0
+            
+    return graph
 
 def set_initial_defaults_several(graph:DiGraph,node_ids:list):
     for node_id in graph:
@@ -19,6 +21,8 @@ def set_initial_defaults_several(graph:DiGraph,node_ids:list):
             node['defaulted']=1
         else:
             node['defaulted']=0
+            
+    return graph
         
 def risk_for_me_all(graph:DiGraph,node_id,iterations=70,mu=0.2,beta=0.6,delay=2,weight_transfer=False):
     risks = []
