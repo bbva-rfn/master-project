@@ -256,6 +256,6 @@ def run_beta(graph, mu, beta, recon_policy, default_delay, max_iterations, num_s
     prob_by_sector = np.array(prob_by_sector)
 
     for j in range(num_sectors):
-        prob_by_sector_total[j] = np.mean(prob_by_sector[j, :])
+        prob_by_sector_total[j] = np.mean(prob_by_sector[:, j]) #he tocat aixo
 
     return prob_by_sector_total
