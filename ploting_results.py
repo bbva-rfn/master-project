@@ -14,7 +14,7 @@ names = {'0':'Sector 1' , '1':'Sector 2', '2':'Sector 3','3':'Sector 4','4':'Sec
 betas = np.arange(0,1,0.4)
 plot_sectorial_multi_beta(probs,names,betas,title='BA network',
                           filename='BA/images/sectorial_density1.png')
-'''
+
 
 densities = pickle.load(open('BBVA/results/comparison_ratio3_SOFT[1, 2, 3, 4, 5].pickle', 'rb'))
 #densities2 = pickle.load(open('BBVA/results/comparison_ratio2_SOFT[8, 9].pickle', 'rb'))
@@ -25,17 +25,16 @@ plot_comparison_densities(densities,delays=[1,2,3,4,5],
 
 '''
 
-sizes1 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[1, 2].pickle', 'rb'))
-sizes2 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[3, 4].pickle', 'rb'))
-sizes3 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[5, 6].pickle', 'rb'))
-sizes4 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[7, 8].pickle', 'rb'))
+sizes1 = pickle.load(open('BBVA/results/cascades_ratio3_SOFT[1, 2, 3, 4].pickle', 'rb'))
+#sizes2 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[3, 4].pickle', 'rb'))
+#sizes3 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[5, 6].pickle', 'rb'))
+#sizes4 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[7, 8].pickle', 'rb'))
 
-[sizes1.append(siz) for siz in sizes2]
-[sizes1.append(siz) for siz in sizes3]
-[sizes1.append(siz) for siz in sizes4]
+#[sizes1.append(siz) for siz in sizes2]
+#[sizes1.append(siz) for siz in sizes3]
+#[sizes1.append(siz) for siz in sizes4]
 
-res = plot_cascade_sizes(sizes1,delays=[1,2,3,4,5,6,7,8],title='',ylim=10e-4,
-                   filename='BBVA/images/cascades_compa_ratio2.png')
+res = plot_cascade_sizes(sizes1,delays=[1,2,3,4],title='',ylim=10e-4,
+                   filename='BBVA/images/cascades_compa_ratio3.png')
 
 print(res)
-'''
