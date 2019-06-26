@@ -5,13 +5,13 @@ import time
 
 
 
-g = pickle.load(open('Barabasi-with-sectors2.pickle', 'rb'))
+g = pickle.load(open('ER/graph_er.pickle', 'rb'))
 
 
 start = time.time()
 
 probs = sectorial_multi_beta_paral(g,repetitions=12,default_delay=4,beta_lapse=0.05,num_sectors=5,
-                                   filename='BA/results/sectorial_lapse005_',max_iterations=100)
+                                   filename='ER/results/sectorial_lapse005_',max_iterations=100)
 end = time.time()
 print(end - start)
 
