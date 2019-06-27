@@ -2,8 +2,7 @@ import pickle
 from plots_sis import plot_sectorial_multi_beta
 from sis_delay_comparison import plot_comparison_densities
 import numpy as np
-from cascades import plot_cascade_sizes
-
+from cascades import plot_cascade_sizes,lists_to_list
 '''
 probs = pickle.load(open('BA/results/sectorial_provaSOFT4.pickle', 'rb'))
 
@@ -25,21 +24,17 @@ plot_comparison_densities(densities,delays=[1,2,3,4,5],
 
 '''
 
-sizes1 = pickle.load(open('BBVA/results/cascades_ratio3_SOFT[1, 2, 3, 4].pickle', 'rb'))
-sizes2 = pickle.load(open('BBVA/results/cascades_ratio3_SOFT[2, 5].pickle', 'rb'))
+sizes1 = pickle.load(open('ER/results/risk_SOFT3_node899.pickle', 'rb'))
+#sizes2 = pickle.load(open('BBVA/results/cascades_ratio3_SOFT[2, 5].pickle', 'rb'))
 #sizes3 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[5, 6].pickle', 'rb'))
 #sizes4 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[7, 8].pickle', 'rb'))
-i = 0
-for siz in sizes2:
-    if(i!=0):
-        sizes1.append(siz)
-    i+=1
+sizes1 = [lists_to_list(sizes1)]
     
 #[sizes1.append(siz) for siz in sizes2]
 #[sizes1.append(siz) for siz in sizes3]
 #[sizes1.append(siz) for siz in sizes4]
-
-res = plot_cascade_sizes(sizes1,delays=[1,2,3,4,5],title='',ylim=10e-4,
-                   filename='BBVA/images/cascades_compa2_ratio3.png')
+print(sizes1)
+res = plot_cascade_sizes(sizes1,delays=[3],title='',ylim=10e-4,
+                   filename='ER/images/risk3_899.png')
 
 print(res)
