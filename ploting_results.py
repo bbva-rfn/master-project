@@ -26,15 +26,20 @@ plot_comparison_densities(densities,delays=[1,2,3,4,5],
 '''
 
 sizes1 = pickle.load(open('BBVA/results/cascades_ratio3_SOFT[1, 2, 3, 4].pickle', 'rb'))
-#sizes2 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[3, 4].pickle', 'rb'))
+sizes2 = pickle.load(open('BBVA/results/cascades_ratio3_SOFT[2, 5].pickle', 'rb'))
 #sizes3 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[5, 6].pickle', 'rb'))
 #sizes4 = pickle.load(open('BBVA/results/cascades_ratio2_SOFT[7, 8].pickle', 'rb'))
-
+i = 0
+for siz in sizes2:
+    if(i!=0):
+        sizes1.append(siz)
+    i+=1
+    
 #[sizes1.append(siz) for siz in sizes2]
 #[sizes1.append(siz) for siz in sizes3]
 #[sizes1.append(siz) for siz in sizes4]
 
-res = plot_cascade_sizes(sizes1,delays=[1,2,3,4],title='',ylim=10e-4,
-                   filename='BBVA/images/cascades_compa_ratio3.png')
+res = plot_cascade_sizes(sizes1,delays=[1,2,3,4,5],title='',ylim=10e-4,
+                   filename='BBVA/images/cascades_compa2_ratio3.png')
 
 print(res)
