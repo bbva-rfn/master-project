@@ -5,7 +5,7 @@ import time
 g = pickle.load(open('graphs/new.pickle', 'rb'))
 start = time.time()
 
-densities = compare_density(g,mu = 0.2,beta=0.6,repetitions=5,max_iterations=150,policy = 'SOFT',
+densities = compare_density(g,mu = 0.2,beta=0.6,repetitions=15,max_iterations=150,policy = 'SOFT',
                             delays=[1,2,3,4],filename='results/density/comparison_ratio3_')
 end = time.time()
 print(end - start)

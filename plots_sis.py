@@ -174,16 +174,23 @@ def plot_sectorial_multi_beta(probs_by_sector, names, betas,
                               title='BBVA sample with Soft reconnection policy & no delay',
                               filename='images/density/Soft_0.png', save=True):
     plt.figure()
+    ax = plt.subplot(111)
     z = 0
     for prob in probs_by_sector:
         lab = names[str(z)]
-        plt.plot(betas, prob, label=lab)
+        ax.plot(betas, prob, label=lab)
         plt.legend(loc='upper left')
         z += 1
     plt.title(title)
     plt.legend(loc='upper left')
     plt.xlabel('Betas')
     plt.ylabel('Density prob')
+    # Shrink current axis by 20%
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+    # Put a legend to the right of the current axis
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
     if save:
         plt.savefig(filename)
