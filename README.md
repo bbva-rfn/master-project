@@ -34,13 +34,19 @@ It allows to give a more detailed plot of the average default density for one de
 - plot_density_sigm()a: allows you to plot the previous density
   
 2. To analyze the cascades and risk:
+
 From cascades.py:
 - cascades_sizes_multiple(), returns the cascade sizes of all the resultant cascades in a list of lists. Every list corresponds to one inputed delay.
 - full_check_cascade_size_setting_default(), allows to check the sizes of the cascades when setting one node(extra parameter: node_id) to default for one single delay.
 - plot_cascade_sizes(), plots the list of lists that contains the sizes obtainned with the functions before. The function also returns the expected cascade size and the maximum cascade size for every delay in the format (delay,expected cascade size,maximum cascade size).
 To plot the sizes of single delay returned with full_check_cascade_size_setting_default() it might be necessary to apply the function lists_to_list() to the result. This function is also in cascades.py()
 
-There are more functions that allow to do the sectorial computations and compute more types of risks unused in our project. But mainly this is the basic functions to perform an analysis of your client-supplier network. 
+3. To check the sectorial behaviour of our network for several ratios.
+
+From plots_sis.py
+- sectorial_multi_beta_paral(), returns the ending percentage of default of each sector for several betas. The way to determine how many betas is the beta_lapse parameter. Basically the function does betas = np.arange(0,1,beta_lapse).
+
+There are more functions that allow to do more sectorial computations and compute more types of risks unused in our project. But mainly this is the basic functions to perform an analysis of your client-supplier network. 
 ## Contact
 
 Feel free to contact us to discuss any issues, questions or comments.
