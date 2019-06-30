@@ -26,7 +26,7 @@ Website: https://github.com/bbva-rfn/master-project/edit/master/README.md
 
 License
 
-The content developed by Axel Brando is distributed under the following license:
+The content developed by Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora is distributed under the following license:
 
 Copyright 2018 Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora
 
