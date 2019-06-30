@@ -34,7 +34,7 @@ year={2019}
 ```
 ## License
 
-The content developed by Axel Brando is distributed under the following license:
+The content developed by Philippe van Amerongen, Ramon Mir Mora and Sergi Sánchez de la blanca Contreras is distributed under the following license:
 
 ```
 MIT License
