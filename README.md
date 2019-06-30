@@ -10,6 +10,37 @@ The code, until 1 July 2019, is a product of the Master's Thesis, part of the Ma
 
 Explain code structure and usage
 
+Ramon: I'll write the main functions that a user can use to compute things on their networks
+
+All the functions allow the following parameters as input: 
+- Graph: Your financial client-supplier network 
+- Mu: The value of the recovery rate
+- Beta: The value of the infetious rate
+- Max_iterations/Iterations: The maximum number of iterations the algorithm may run for every simulation
+- Repetitions: The amount of simulations we want to do from scratch
+- Delay: The value or values of the parameter delay
+- Policy: The underlying policy we want our system to follow: 'SOFT','RANDOM','NONE'
+- Filename: Where to store the computed values. The filename is completed inside the functions with the policy and the delay, be carefull. 
+
+1. To compute the default probability behaviour:
+
+In sis_delay_comparison.py:
+- compare_density() , gives the average default density behaviour of all the computed simulations for every delay given in a list of lists.
+- plot_comparison_densities() allows you to plot the previously obtainned densities
+
+In sectorial_density_functions.py:
+- density_with_sigma(), returns all the values of the density at each iteration for all the simulations performed in a pandas dataframe.
+It allows to give a more detailed plot of the average default density for one delay including the confidence interval.In this case the reconnection policy uses the defined class ReconnectionPolicy.SOFT,.NONE,...
+- plot_density_sigm()a: allows you to plot the previous density
+  
+2. To analyze the cascades and risk:
+From cascades.py:
+- cascades_sizes_multiple(), returns the cascade sizes of all the resultant cascades in a list of lists. Every list corresponds to one inputed delay.
+- full_check_cascade_size_setting_default(), allows to check the sizes of the cascades when setting one node(extra parameter: node_id) to default for one single delay.
+- plot_cascade_sizes(), plots the list of lists that contains the sizes obtainned with the functions before. The function also returns the expected cascade size and the maximum cascade size for every delay in the format (delay,expected cascade size,maximum cascade size).
+To plot the sizes of single delay returned with full_check_cascade_size_setting_default() it might be necessary to apply the function lists_to_list() to the result. This function is also in cascades.py()
+
+There are more functions that allow to do the sectorial computations and compute more types of risks unused in our project. But mainly this is the basic functions to perform an analysis of your client-supplier network. 
 ## Contact
 
 Feel free to contact us to discuss any issues, questions or comments.
