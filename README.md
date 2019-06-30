@@ -72,7 +72,7 @@ Here we stipulate the contributions of each member to the present report.
 
      - Database/previous work explanation/  Study Design
 
-     - Results, execution \& analysis (Study of critical delay ER/BA)
+     - Results, execution \& analysis (Study of critical delay ER-BA)
 
      - Appendix A
 
