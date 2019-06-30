@@ -1,44 +1,61 @@
-# master-project
+# Agent-based models for assessing the risk of default propagation in interconnected sectorial financial networks
 
-This repository is a collection of Jupyter notebooks intended to solve a lot of problems in which blablabla.
+High level explanation
 
-The whole code, until 1.7.2019, is the result of a final Master's Thesis of the Master's Degree in Agent-based models for assessing the riskof default propagation in interconnectedsectorial financial networks supervised by Jordi Nin, PhD. The Master's Thesis report is published in this repository in a PDF format but my idea is to realize a web view of the final master's work in the coming days. To summary all the contents I explained in the report, it is possible to consult the slides of the presentation. Any contribution or idea to continue the lines of the proposed work will be very welcome.
+## Code structure and usage
 
-some explanation.
+Explain code structure and usage
 
-and done.
+## Contact
 
+Feel free to contact us to discuss any issues, questions or comments.
 
-Notebooks
+GitHub: [Ramon Mir](https://github.com/aemon4), [Philippe van Amerongen](https://github.com/phicoder), [Sergi Sánchez](https://github.com/Sergisanchezcontreras)
 
-(Currently programed on Spider Python 3.6 )
-Artificial Intelligence 
-Contributions
+### BibTex reference format for citation for the Code
+```
+@misc{BBVArfn_code,
+title={Agent-based models for assessing the risk of default propagation in interconnected sectorial financial networks},
+url={https://github.com/bbva-rfn/master-project},
+note={GitHub repository with a collection of code intended to simulate financial client-supplier networks.},
+author={Philippe van Amerongen, Ramon Mir Mora, Sergi Sánchez de la blanca Contreras},
+year={2019}
+}
+```
 
-Contributions are welcome! For bug reports or requests please submit an issue.
+### BibTex reference format for citation for the report of the Master's Thesis
+```
+@misc{BBVArfn,
+title={Agent-based models for assessing the risk of default propagation in interconnected sectorial financial networks},
+url={https://github.com/bbva-rfn/master-project/blob/master/_thesis.pdf},
+author={Philippe van Amerongen, Ramon Mir Mora, Sergi Sánchez de la blanca Contreras},
+year={2019}
+}
+```
+## License
 
-Contact
+The content developed by Axel Brando is distributed under the following license:
 
-Feel free to contact me to discuss any issues, questions or comments.
+```
+MIT License
 
-GitHub: aemon4,phicoder,Sergisanchezcontreras
-Website: https://github.com/bbva-rfn/master-project/edit/master/README.md
+Copyright (c) 2019 Philippe van Amerongen, Ramon Mir Mora, Sergi Sánchez de la blanca Contreras
 
-License
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-The content developed by Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora is distributed under the following license:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Copyright 2019 Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
