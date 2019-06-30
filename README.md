@@ -18,31 +18,33 @@ All the functions allow the following parameters as input:
 - Policy: The underlying policy we want our system to follow: 'SOFT','RANDOM','NONE'
 - Filename: Where to store the computed values. The filename is completed inside the functions with the policy and the delay, be carefull. 
 
-1. To compute the default probability behaviour:
+### Computing the default probability behaviour
 
-In sis_delay_comparison.py:
-- compare_density() , gives the average default density behaviour of all the computed simulations for every delay given in a list of lists.
-- plot_comparison_densities() allows you to plot the previously obtainned densities
+In [sis_delay_comparison.py](sis_delay_comparison.py):
+- `compare_density()`, gives the average default density behaviour of all the computed simulations for every delay given in a list of lists.
+- `plot_comparison_densities()` allows you to plot the previously obtainned densities
 
-In sectorial_density_functions.py:
-- density_with_sigma(), returns all the values of the density at each iteration for all the simulations performed in a pandas dataframe.
-It allows to give a more detailed plot of the average default density for one delay including the confidence interval.In this case the reconnection policy uses the defined class ReconnectionPolicy.SOFT,.NONE,...
-- plot_density_sigm()a: allows you to plot the previous density
+In [sectorial_density_functions.py](sectorial_density_functions.py):
+- `density_with_sigma()`, returns all the values of the density at each iteration for all the simulations performed in a pandas dataframe.
+It allows to give a more detailed plot of the average default density for one delay including the confidence interval.In this case the reconnection policy uses the defined class ReconnectionPolicy.SOFT,.NONE, ...
+- `plot_density_sigma()` allows you to plot the previous density
   
-2. To analyze the cascades and risk:
+### Analyzing the cascades and risk
 
-From cascades.py:
-- cascades_sizes_multiple(), returns the cascade sizes of all the resultant cascades in a list of lists. Every list corresponds to one inputed delay.
-- full_check_cascade_size_setting_default(), allows to check the sizes of the cascades when setting one node(extra parameter: node_id) to default for one single delay.
-- plot_cascade_sizes(), plots the list of lists that contains the sizes obtainned with the functions before. The function also returns the expected cascade size and the maximum cascade size for every delay in the format (delay,expected cascade size,maximum cascade size).
-To plot the sizes of single delay returned with full_check_cascade_size_setting_default() it might be necessary to apply the function lists_to_list() to the result. This function is also in cascades.py()
+From [cascades.py](cascades.py):
+- `cascades_sizes_multiple()`, returns the cascade sizes of all the resultant cascades in a list of lists. Every list corresponds to one inputed delay.
+- `full_check_cascade_size_setting_default()`, allows to check the sizes of the cascades when setting one node (extra parameter: `node_id`) to default for one single delay.
+- `plot_cascade_sizes()`, plots the list of lists that contains the sizes obtainned with the functions before. The function also returns the expected cascade size and the maximum cascade size for every delay in the format `(delay, expected cascade size, maximum cascade size)`.
 
-3. To check the sectorial behaviour of our network for several ratios.
+To plot the sizes of single delay returned with `full_check_cascade_size_setting_default()` it might be necessary to apply the function `lists_to_list()` to the result. This function is also in [cascades.py](cascades.py)
 
-From plots_sis.py
-- sectorial_multi_beta_paral(), returns the ending percentage of default of each sector for several betas. The way to determine how many betas is the beta_lapse parameter. Basically the function does betas = np.arange(0,1,beta_lapse).
+### Checking the sectorial behaviour of our network for several ratios
+
+From [plots_sis.py](plots_sis.py)
+- `sectorial_multi_beta_paral()`, returns the ending percentage of default of each sector for several betas. The way to determine how many betas is the beta_lapse parameter. Basically the function does `betas = np.arange(0, 1, beta_lapse)`.
 
 There are more functions that allow to do more sectorial computations and compute more types of risks unused in our project. But mainly this is the basic functions to perform an analysis of your client-supplier network. 
+
 ## Contact
 
 Feel free to contact us to discuss any issues, questions or comments.
