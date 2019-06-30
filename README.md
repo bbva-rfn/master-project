@@ -8,10 +8,6 @@ The code, until 1 July 2019, is a product of the Master's Thesis, part of the Ma
 
 ## Code structure and usage
 
-Explain code structure and usage
-
-Ramon: I'll write the main functions that a user can use to compute things on their networks
-
 All the functions allow the following parameters as input: 
 - Graph: Your financial client-supplier network 
 - Mu: The value of the recovery rate
