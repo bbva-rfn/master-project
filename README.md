@@ -1,6 +1,6 @@
 # Agent-based models for assessing the risk of default propagation in interconnected sectorial financial networks
 
-This project is a continuation of Barja et al., [2019](#references) and aims to provide more accurate insights in risk assessment of default propagation in interconnected sectorial financial networks. The algorithm may be used to analyze systemic risk posed by companies on a financial system, as well as to assess the global stability of a financial system. 
+This project is a continuation of Barja et al., [2019](#references) and aims to provide more accurate insights in risk assessment of default propagation in interconnected sectorial financial networks. The algorithm may be used to analyze systemic risk posed by companies on a financial system, as well as to assess the global stability of a financial system. In order to do this, we model default propagation by following a SIS epidemiology model.
 
 The financial system is modelled by using transaction data between businesses. The transaction data is then converted into client-supplier relationships, represented as a directional weighted graph. The Python3 library [networkx](https://networkx.github.io/) is used for efficient graph management.
 
