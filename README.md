@@ -42,7 +42,7 @@ The contributions for the code have been:
         
         - Agent-based model implementations
         
-       - refining and cleaning code
+       -  Refining and cleaning code
         
 
 
@@ -52,29 +52,29 @@ Report
 Here we stipulate the contributions of each member to the present report. 
 
 
-    - Philippe Van Ameronggen
+ - Philippe Van Ameronggen
 
-        - Narrative parts (Abstract,Introduction,Study Design,Discussions)
-        
-    - Ramon Mir Mora
-    
-        
-        -  Theoretical parts (Complex Networks, SIS model,Failure Cascades)
-        
-        - Results analysis (Cascades, risks and ER-BA comparison)
-        
-        - Conclusions and Appendix B
-        
-        
-    
-    - Sergi Sánchez de la Blanca Contreras
+     - Narrative parts (Abstract,Introduction,Study Design,Discussions)
 
-        
-        -  Database/previous work explanation/  Study Design
-        
-        - Results, execution \& analysis (Study of critical delay ER/BA)
-        
-        - Appendix A
-        
-        
-        
+ - Ramon Mir Mora
+
+
+     - Theoretical parts (Complex Networks, SIS model,Failure Cascades)
+
+     - Results analysis (Cascades, risks and ER-BA comparison)
+
+     - Conclusions and Appendix B
+
+
+
+ - Sergi Sánchez de la Blanca Contreras
+
+
+     - Database/previous work explanation/  Study Design
+
+     - Results, execution \& analysis (Study of critical delay ER/BA)
+
+     - Appendix A
+
+
+
