@@ -28,7 +28,7 @@ License
 
 The content developed by Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora is distributed under the following license:
 
-Copyright 2018 Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora
+Copyright 2019 Sergi Sánchez de la blanca Contrera, Philippe Van Amerongen, Ramon Mir Mora
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
