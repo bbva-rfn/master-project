@@ -1,6 +1,10 @@
 # Agent-based models for assessing the risk of default propagation in interconnected sectorial financial networks
 
-High level explanation
+This project is a continuation of Barja et al., [2019](#references) and aims to provide more accurate insights in risk assessment of default propagation in interconnected sectorial financial networks. The algorithm may be used to analyze systemic risk posed by companies on a financial system, as well as to assess the global stability of a financial system. 
+
+The financial system is modelled by using transaction data between businesses. The transaction data is then converted into client-supplier relationships, represented as a directional weighted graph. The Python3 library [networkx](https://networkx.github.io/) is used for efficient graph management.
+
+The code, until 1 July 2019, is a product of the Master's Thesis, part of the Master's Degree in Data Science at the Universitat de Barcelona supervised by Jordi Nin, PhD.
 
 ## Code structure and usage
 
@@ -59,3 +63,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## References
+Adrià Barja, Alejandro Martínez, Alex Arenas, Pablo Fleurquin, Jordi Nin, José J. Ramasco and Elena Tomás (2019). "Assessing the Propagation of Default in Intercon-nected Sectorial Financial Networks." In: *IEEE COMPUTATIONAL INTELLIGENCE MAG.*
